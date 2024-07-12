@@ -1,0 +1,70 @@
+subsection main parameters
+	set initial_control = 1.0
+	set time_intervals	= 40
+	set end_time	= 1.0	    	
+	set refinement_level = 5
+end
+
+subsection Local Functional parameters
+	set alpha_tikhonov	  = 4.75e-10
+ 	set control_constant	  = 1.0e3
+	set ud_values_constant = 0.0e-2
+	set ud_values_scale	  = 1.0e-3
+end
+	
+subsection Crack parameters
+	set crack_low_x = 0.3
+	set crack_high_x = 0.5
+	set crack_low_y = 0.4779
+	set crack_high_y = 0.5221
+end
+
+subsection Local PDE parameters
+	set constant_k	= 1.0e-10
+	set alpha_eps	= 0.0884
+	set gamma_penal	= 1.0e5
+	set G_c		= 1.0
+	set E_modulus	= 1.0e+6
+	set poisson_ratio_nu	= 0.2
+	set eta = 1.0e3
+end
+
+subsection My functions parameters
+	set displacement_step_size_a = 1.0e-4
+	set displacement_step_size_b = 1e-5
+end
+
+subsection newtonsolver parameters
+	set line_maxiter         = 6
+	set linesearch_rho       = 0.5
+	set nonlinear_global_tol = 1.0e-8
+	set nonlinear_maxiter    = 300
+	set nonlinear_rho        = 0.1 
+	set nonlinear_tol        = 1.0e-8
+end
+
+subsection reducednewtonalgorithm parameters
+	set line_maxiter         = 3
+	set linear_global_tol    = 1.e-12
+	set linear_maxiter       = 30
+	set linear_tol           = 1.e-12
+	set linesearch_c         = 0.1
+ 	set linesearch_rho       = 0.9
+ 	set nonlinear_global_tol = 5.0e-11
+	set nonlinear_maxiter    = 30
+	set nonlinear_tol        = 5.0e-11
+end
+
+subsection output parameters
+	set file_format       = .vtk
+	set ignore_iterations = PDENewton;Cg
+	set logfile           = dope.log
+	set never_write_list  = Residual;Hessian;Tangent;Update
+	#set never_write_list  = Gradient;Hessian;Tangent;Adjoint
+	set printlevel        = 6
+	set number_precision	 = 4
+	set eps_machine_set_by_user	 = 1.0e-32
+	set results_dir       = Results/
+end
+
+
