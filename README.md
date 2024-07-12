@@ -129,4 +129,23 @@ iteration we extend the desired phase-field to the left. Formally in the $k$-th 
 set $\varphi_d = 0$ in $[0.3 \cdot 0.98^k,0.5] \times \{0.5\}$ and 1 else. In total we perform 
 10 updates.
 
+# Installation instructions
+1. Install deal.II 9.5.1 via www.dealii.org \
+   Download: https://www.dealii.org/download.html \
+   Installation instructions: https://www.dealii.org/current/readme.html 
+ 
+2. Install DOpElib via http://www.dopelib.net \
+   Download: https://github.com/winnifried/dopelib \
+   Installation instructions: https://winnifried.github.io/dopelib/documentation.html 
+        in Chapter 2 of the *.pdf manual. 
+ 
+3. Please put the current code into some new folder on your machine. \
+   Follow instructions from DOpElib *.pdf manual in Chapter 4 
+   (i.e, Section 4.4 Creating new examples)
+   to set up all environment variables (for finding deal.II and DOpElib) correctly. \
+   Then: build, compile, run as described in Section 4.4 of the dopelib manual.
+ 
+4. The results of this code (see local folder Results/ ) should then reproduce 
+   Example 1 (Section 5.1.1) of Khimin et al., JCP, 2022. 
+
 # References
