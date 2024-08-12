@@ -34,9 +34,9 @@ Example 1 (Section 5.1.1) of Khimin et al., JCP, 2022.
 # References
 
 [1] D. Khimin, M.C. Steinbach, T. Wick; Space-time formulation, discretization, and computational performance studies for phase-field fracture optimal control problems,
-Journal of Computational Physics (JCP), Vol. 470, 2022, 111554
+Journal of Computational Physics (JCP), Vol. 470, 2022.
 
 [2] C. Goll, T. Wick, W. Wollner; DOpElib: Differential Equations and Optimization Environment; A Goal Oriented Software
-Library for Solving PDEs and Optimization Problems with PDEs, Archive of Numerical Software (ANS), Vol. 5(2), 2017, pp. 1-14
+Library for Solving PDEs and Optimization Problems with PDEs, Archive of Numerical Software (ANS), Vol. 5(2),  pp. 1-14, 2017.
 
 [3] Daniel Arndt, Wolfgang Bangerth, Maximilian Bergbauer, Marco Feder, Marc Fehling, Johannes Heinz, Timo Heister, Luca Heltai, Martin Kronbichler, Matthias Maier, Peter Munch, Jean-Paul Pelteret, Bruno Turcksin, David Wells, Stefano Zampini. The deal.II Library, Version 9.5, Journal of Numerical Mathematics, vol. 31, no. 3, pages 231-246, 2023. 
