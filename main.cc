@@ -144,7 +144,7 @@ typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> CNLS;
 
 // Define the Newton solver which is used for all PDE problems,
 // i.e., this Newton solver treats the nonlinear forward PDE problem.
-typedef InstatStepNewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
+typedef InstatStepModifiedNewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
 
 /** 
  * 
