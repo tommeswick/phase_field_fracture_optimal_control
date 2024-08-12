@@ -27,8 +27,12 @@ Follow instructions from DOpElib *.pdf manual in Chapter 4
 (i.e, Section 4.4 Creating new examples)
 to set up all environment variables (for finding deal.II and DOpElib) correctly. \
 Then: build, compile, run as described in Section 4.4 of the dopelib manual.
+To this end, building and compiling yields the executable JCP_5_1_1 that can
+be run in the (Linux) terminal via ./JCP_5_1_1 
+by taking implicitly the parameter file dope.prm into account.
 
-4. The results of this code (see local folder Results/ ) should then reproduce 
+4. The results of this code (see local folder Results/ (this name given in dope.prm (bottom),
+which can be thus changed when multiple simulations shall be run simultaneously) ) should then reproduce 
 Example 1 (Section 5.1.1) of Khimin et al., JCP, 2022. 
 
 # References
