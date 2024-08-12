@@ -130,8 +130,8 @@ typedef InstatOptProblemContainer<TSP, DTSP, FUNC,
     LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>,
     LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
     SimpleDirichletData<VECTOR, DIM>,
-    NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>, SPARSITYPATTERN,
-    VECTOR, DIM, DIM> OP;
+    NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>, SPARSITYPATTERN,
+    VECTOR, CDIM, DIM> OP;
 #undef TSP
 #undef DTSP
 
@@ -157,7 +157,7 @@ typedef InstatStepModifiedNewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
  * 
 **/
 typedef ReducedNewtonAlgorithm<OP, VECTOR> RNA;
-typedef InstatReducedProblem<CNLS, NLS, INTEGRATOR, INTEGRATOR, OP, VECTOR, DIM,
+typedef InstatReducedProblem<CNLS, NLS, INTEGRATOR, INTEGRATOR, OP, VECTOR, CDIM,
     DIM> RP;
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -318,13 +318,13 @@ int main(int argc, char **argv)
   // At this point, we have discretized the time domain with dG(0) and obtain
   // a backward Euler scheme. This results in a classical methods of line 
   // time discretization.
-  MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, DIM,
+  MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, CDIM,
       DIM> DOFH(triangulation, control_fe, state_fe, times,
       DOpEtypes::VectorAction::stationary);
 
   // Initialize constraints (for examples and more information,
   // please refer to the DOpElib documentation)
-  NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> Constraints;
+  NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> Constraints;
 
   // Initialize optimization problem
   OP P(LFunc, LPDE, Constraints, DOFH);
