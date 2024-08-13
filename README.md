@@ -38,10 +38,10 @@ implementation with own runs, the log file dope_Aug_12_2024.log can be used.
 
 # References
 
-[1] D. Khimin, M.C. Steinbach, T. Wick; Space-time formulation, discretization, and computational performance studies for phase-field fracture optimal control problems,
+[1] Denis Khimin, Marc C. Steinbach, Thomas Wick; Space-time formulation, discretization, and computational performance studies for phase-field fracture optimal control problems,
 Journal of Computational Physics (JCP), Vol. 470, 2022.
 
-[2] C. Goll, T. Wick, W. Wollner; DOpElib: Differential Equations and Optimization Environment; A Goal Oriented Software
+[2] Christian Goll, Thomas Wick, Winnifried Wollner; DOpElib: Differential Equations and Optimization Environment; A Goal Oriented Software
 Library for Solving PDEs and Optimization Problems with PDEs, Archive of Numerical Software (ANS), Vol. 5(2),  pp. 1-14, 2017.
 
 [3] Daniel Arndt, Wolfgang Bangerth, Maximilian Bergbauer, Marco Feder, Marc Fehling, Johannes Heinz, Timo Heister, Luca Heltai, Martin Kronbichler, Matthias Maier, Peter Munch, Jean-Paul Pelteret, Bruno Turcksin, David Wells, Stefano Zampini. The deal.II Library, Version 9.5, Journal of Numerical Mathematics, vol. 31, no. 3, pages 231-246, 2023. 
