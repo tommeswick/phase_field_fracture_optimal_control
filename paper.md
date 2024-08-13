@@ -166,6 +166,8 @@ set $\varphi_d = 0$ in $[0.3 \cdot 0.98^k,0.5] \times \{0.5\}$ and 1 else. In to
 
 4. The results of this code (see local folder Results/ (this name given in dope.prm (bottom),
    which can be thus changed when multiple simulations shall be run simultaneously) ) should then reproduce 
-   Example 1 (Section 5.1.1) of [@JCP2022]
+   Example 1 (Section 5.1.1) of [@JCP2022]. To compare the terminal output of the current
+   implementation with own runs, the log file dope_Aug_12_2024.log can be used.
+
 
 # References
