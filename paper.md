@@ -127,7 +127,7 @@ state $\boldsymbol{u}(t_m)$ such that
     &\quad + G_c \varepsilon (\nabla \varphi(t_m), \nabla \Phi_{\varphi}(t_m))_{L^2(\Omega)}
     - \frac{G_c}{\varepsilon} (1 - \varphi(t_m), \Phi_{\varphi}(t_m))_{L^2(\Omega)} \\
     &\quad + (1 - \kappa) (\varphi(t_m) \mathbb{C} e(u(t_m)) : e(u(t_m)), \Phi_{\varphi}(t_m))\\
-      \quad (q(t_m), \Phi_{u}(t_m))_{L^2(\Gamma_N)}\Big](t_m - t_{m-1})
+    &\quad -(q(t_m), \Phi_{u}(t_m))_{L^2(\Gamma_N)}\Big](t_m - t_{m-1})
   \end{aligned}
 \end{equation}
 In the example which is solved by the provided code, the domain is defied as 
