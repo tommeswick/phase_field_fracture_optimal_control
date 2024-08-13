@@ -26,10 +26,6 @@ authors:
 affiliations:
  - name: Leibniz Universität Hannover, Institut für Angewandte Mathematik, Welfengarten 1, 30167 Hannover, Germany
    index: 1
- - name: Institution Name, Country
-   index: 2
- - name: Independent Researcher, Country
-   index: 3
 date: 11 July 2024
 bibliography: joss_jcp.bib
 ---
@@ -42,7 +38,8 @@ This algorithmic framework was developed alongside our recent publication
 [@JCP2022] and enables the accurate and efficient simulation of phase-field 
 optimal control problems in a space-time fashion. 
 In this example, the fracture is controlled through Neumann boundary conditions,
-and the cost functioncal tracks the distance between.
+and the cost functioncal tracks the distance between the current 
+fracture and the desired fracture.
 Our code is based on the open source libraries DOpElib[@dopelib] 
 and deal.II [@deal2020].
 
@@ -58,12 +55,12 @@ of complexity is added as the forward problem is solved multiple times within th
 loop [@BeMeVe07], [@HiPiUlUl09], [@Troe09].
 
 The following numerical experiment was developed as 
-an example for the DOpElib library[@dopelib], which has already been referenced 
+an example for the DOpElib library [@dopelib], which has already been referenced 
 in several scientific publications; see https://winnifried.github.io/dopelib/publications.html . 
 While existing examples in DOpElib 
 solve PDEs with phase-field fracture, they do not include optimization of fractures. 
-Therefore, our novel codebase presents a powerful tool for researchers and practitioners.
-This implementation not only advances theoretical research based on [@JCP2022], 
+Therefore, our codebase presents a novel and powerful tool for researchers and practitioners.
+This implementation not only advances computational research based on [@JCP2022], 
 but also supports practical applications in fracture mechanics.
 
 # Mathematical formulation and numerical solution
@@ -126,17 +123,17 @@ state $\boldsymbol{u}(t_m)$ such that
     + \eta (\varphi(t_m), \Phi_{\varphi}(t_m)) \\
     &- \gamma (\varphi(t_{m-1}), \Phi_{\varphi}(t_{m}))_{\varphi(t_m) > \varphi(t_{m-1})}
     - \eta (\varphi(t_{m-1}), \Phi_{\varphi}(t_{m})) \\
-    &  +\bigg[(g(\varphi)(\mathbb{C} e(u(t_m)), e(\Phi_u)))_{L^2(\Omega)} \\
+    &  +\Big[(g(\varphi)(\mathbb{C} e(u(t_m)), e(\Phi_u)))_{L^2(\Omega)} \\
     &\, + G_c \varepsilon (\nabla \varphi(t_m), \nabla \Phi_{\varphi}(t_m))_{L^2(\Omega)}
     - \frac{G_c}{\varepsilon} (1 - \varphi(t_m), \Phi_{\varphi}(t_m))_{L^2(\Omega)} \\
     &\, + (1 - \kappa) (\varphi(t_m) \mathbb{C} e(u(t_m)) : e(u(t_m)), \Phi_{\varphi}(t_m))\\
-    &- (q(t_m), \Phi_{u}(t_m))_{L^2(\Gamma_N)}\bigg](t_m - t_{m-1})
+    &- (q(t_m), \Phi_{u}(t_m))_{L^2(\Gamma_N)}\Big](t_m - t_{m-1})
   \end{aligned}
 \end{equation}
 In the example which is solved by the provided code, the domain is defied as 
 a unit square $\Omega = [0,1]^2$ including an initial crack at $[0.5,1] \times \{0.5\}$.
 The desired phase-field $\varphi_d$ extends the initial crack to the left, i.e.,
-$\varphi_d = 0$ in $[0.3,0.5] \times \{0.5\}$ and $\varphi_d = 0$ everywhere else.
+$\varphi_d = 0$ in $[0.3,0.5] \times \{0.5\}$ and $\varphi_d = 1$ everywhere else.
 The control is acting in orthogonal direction on the top boundary $[0,1] \times \{1\}$.
 
 Our code solves \eqref{NLP} with Algorithm 1 from [@JCP2022] repeatedly, where in each 
@@ -164,10 +161,10 @@ set $\varphi_d = 0$ in $[0.3 \cdot 0.98^k,0.5] \times \{0.5\}$ and 1 else. In to
    be run in the (Linux) terminal via ./JCP_5_1_1 
    by taking implicitly the parameter file dope.prm into account.
 
-4. The results of this code (see local folder Results/ (this name given in dope.prm (bottom),
-   which can be thus changed when multiple simulations shall be run simultaneously) ) should then reproduce 
+4. The results of this code are by default stored in the folder Results/, an alternative name can
+   specified in dope.rpm. This is especially useful, when multiple simulations shall be run simultaneously.
+   In the current configuration the code should then reproduce 
    Example 1 (Section 5.1.1) of [@JCP2022]. To compare the terminal output of the current
    implementation with own runs, the log file dope_Aug_12_2024.log can be used.
-
 
 # References
