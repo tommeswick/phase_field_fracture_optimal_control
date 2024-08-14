@@ -26,7 +26,7 @@ authors:
 affiliations:
  - name: Leibniz Universität Hannover, Institut für Angewandte Mathematik, Welfengarten 1, 30167 Hannover, Germany
    index: 1
-date: 11 July 2024
+date: 14 August 2024
 bibliography: joss_jcp.bib
 ---
 
