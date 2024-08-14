@@ -1,6 +1,6 @@
 # Phase-Field Fracture Optimal Control
 
-Space-time formulation, discretization, and computational performance studies for phase-field fracture optimal control problems - reproduction code Section 5.1.1'
+Space-time formulation, discretization, and computational performance studies for phase-field fracture optimal control problems: reproduction code Section 5.1.1'
 
 # Summary
 
