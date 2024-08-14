@@ -33,12 +33,12 @@ bibliography: joss_jcp.bib
 # Summary
 The provided codebase is designed to solve phase-field fracture optimal control 
 problems, wherein the goal is to achieve a desired fracture in a brittle material
-thorugh the application of external forces. 
+through the application of external forces. 
 This algorithmic framework was developed alongside our recent publication
 [@JCP2022] and enables the accurate and efficient simulation of phase-field 
 optimal control problems in a space-time fashion. 
 In this example, the fracture is controlled through Neumann boundary conditions,
-and the cost functioncal tracks the distance between the current 
+and the cost functional tracks the distance between the current 
 fracture and the desired fracture.
 Our code is based on the open source libraries DOpElib [@dopelib] 
 and deal.II [@deal2020].
