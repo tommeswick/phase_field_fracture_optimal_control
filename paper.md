@@ -1,5 +1,5 @@
 ---
-title: 'Space-time formulation, discretization, and computational performance studies for phase-field fracture optimal control problems - reproduction code'
+title: 'Space-time formulation, discretization, and computational performance studies for phase-field fracture optimal control problems: reproduction code'
 tags:
   - C++
   - Applied Mathematics
@@ -40,7 +40,7 @@ optimal control problems in a space-time fashion.
 In this example, the fracture is controlled through Neumann boundary conditions,
 and the cost functioncal tracks the distance between the current 
 fracture and the desired fracture.
-Our code is based on the open source libraries DOpElib[@dopelib] 
+Our code is based on the open source libraries DOpElib [@dopelib] 
 and deal.II [@deal2020].
 
 # Statement of need
