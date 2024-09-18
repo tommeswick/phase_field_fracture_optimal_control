@@ -9,7 +9,7 @@ on:
 jobs:
   cache-dealii:
     runs-on: ubuntu-latest
-    container: rockylinux:8  # Use Rocky Linux 8 container
+    container: rockylinux:8
 
     steps:
     - name: Checkout code
@@ -17,24 +17,18 @@ jobs:
 
     - name: Install dependencies
       run: |
-        # Update packages and install development tools
         yum update -y
         yum groupinstall -y "Development Tools"
-        yum install -y epel-release
-        yum install -y cmake wget gcc gcc-c++ make git
+        yum install -y epel-release cmake wget gcc gcc-c++ make git
 
-        # Enable the 'powertools' repository (equivalent to CodeReady Builder)
+        # Enable 'powertools' for additional dependencies
         yum config-manager --set-enabled powertools
 
-        # Install libaec to provide libsz.so.2 for HDF5
-        yum install -y libaec libaec-devel
-
-        # Install additional dependencies for deal.II
-        yum install -y blas lapack hdf5 hdf5-devel boost boost-devel
+        # Install required libraries for deal.II
+        yum install -y libaec libaec-devel blas lapack hdf5 hdf5-devel boost boost-devel
 
     - name: Download deal.II tarball
-      run: |
-        wget https://dealii.org/downloads/dealii-9.5.1.tar.gz
+      run: wget https://dealii.org/downloads/dealii-9.5.1.tar.gz
 
     - name: Cache deal.II installation
       id: cache-dealii
@@ -66,7 +60,7 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
     container: rockylinux:8
-    needs: cache-dealii  # This job depends on the cache-dealii job
+    needs: cache-dealii
 
     steps:
     - name: Checkout code
@@ -74,20 +68,15 @@ jobs:
 
     - name: Install dependencies
       run: |
-        # Install dependencies again in this job
         yum update -y
         yum groupinstall -y "Development Tools"
-        yum install -y epel-release
-        yum install -y cmake wget gcc gcc-c++ make git
+        yum install -y epel-release cmake wget gcc gcc-c++ make git
 
-        # Enable the 'powertools' repository
+        # Enable 'powertools' for additional dependencies
         yum config-manager --set-enabled powertools
 
-        # Install libaec to provide libsz.so.2 for HDF5
-        yum install -y libaec libaec-devel
-
-        # Install additional dependencies for deal.II
-        yum install -y blas lapack hdf5 hdf5-devel boost boost-devel
+        # Install required libraries for deal.II
+        yum install -y libaec libaec-devel blas lapack hdf5 hdf5-devel boost boost-devel
 
     - name: Restore Cache for deal.II
       uses: actions/cache@v3
@@ -98,19 +87,25 @@ jobs:
           dealii-9.5.1-${{ runner.os }}-
 
     - name: Set up environment variables for deal.II
-      run: echo "export DEAL_II_DIR=~/dealii" >> $GITHUB_ENV
+      run: |
+        export DEAL_II_DIR=~/dealii
+        echo "DEAL_II_DIR=$DEAL_II_DIR" >> $GITHUB_ENV
 
     - name: Install DOpElib
       run: |
         # Install DOpElib from GitHub
         git clone https://github.com/winnifried/dopelib.git
         cd dopelib/DOpEsrc
-        # Run c-all to build libraries
+
+        # Run c-all to build libraries, explicitly passing DEAL_II_DIR to cmake
+        ./autocmake.sh configure -DDEAL_II_DIR=$DEAL_II_DIR
         make c-all
+
         # Manually copy the compiled libraries to the installation directory
         mkdir -p ~/dopelib/lib
         cp autobuild/release/libdope.a ~/dopelib/lib/
         cp autobuild/debug/libdope.a ~/dopelib/lib/
+
         # Copy headers if necessary
         mkdir -p ~/dopelib/include
         cp -r ../include/* ~/dopelib/include/
@@ -121,7 +116,7 @@ jobs:
         # Set up environment variables
         export DEAL_II_DIR=~/dealii
         export DOPELIB_DIR=~/dopelib
-        
+
         # Compile your project
         mkdir build
         cd build
@@ -129,6 +124,4 @@ jobs:
         make
 
     - name: Run tests
-      run: |
-        # Run your test script
-        ./run_tests.sh
+      run: ./run_tests.sh
