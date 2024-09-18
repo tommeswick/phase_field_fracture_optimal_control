@@ -21,19 +21,29 @@ jobs:
         yum update -y
         yum groupinstall -y "Development Tools"
         yum install -y epel-release
+        yum config-manager --set-enabled crb  # Enable CodeReady Builder (crb)
+        
+        # Install necessary dependencies
         yum install -y cmake wget gcc gcc-c++ make git
 
         # Enable the 'powertools' repository (equivalent to CodeReady Builder)
         yum config-manager --set-enabled powertools
 
+    - name: Build and Install libaec from Source
+      run: |
+        # Download and build libaec from source
+        wget https://gitlab.dkrz.de/k202009/libaec/-/archive/v1.0.6/libaec-v1.0.6.tar.gz
+        tar -xzf libaec-v1.0.6.tar.gz
+        cd libaec-v1.0.6
+        ./configure
+        make
+        make install
+        cd ..
+
+    - name: Install remaining dependencies
+      run: |
         # Install additional dependencies for deal.II
-        # Install libaec to provide libsz.so.2
-        yum install -y libaec libaec-devel
-
-        # Install HDF5 with --nobest to avoid version conflicts
         yum install -y hdf5 hdf5-devel --nobest
-
-        # Install other dependencies
         yum install -y blas lapack boost boost-devel suitesparse
 
     - name: Download deal.II tarball
@@ -82,7 +92,8 @@ jobs:
         yum update -y
         yum install -y epel-release
         yum groupinstall -y "Development Tools"
-        yum install -y cmake wget gcc gcc-c++ make git blas lapack hdf5 hdf5-devel boost boost-devel suitesparse libaec libaec-devel --nobest
+        yum config-manager --set-enabled crb  # Enable CodeReady Builder (crb)
+        yum install -y cmake wget gcc gcc-c++ make git blas lapack hdf5 hdf5-devel boost boost-devel suitesparse
 
     - name: Restore Cache for deal.II
       uses: actions/cache@v3
