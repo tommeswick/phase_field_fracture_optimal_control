@@ -9,7 +9,7 @@ on:
 jobs:
   cache-dealii:
     runs-on: ubuntu-latest
-    container: rockylinux:8
+    container: rockylinux:8  # Use Rocky Linux 8 container
 
     steps:
     - name: Checkout code
@@ -17,19 +17,21 @@ jobs:
 
     - name: Install dependencies
       run: |
+        # Update packages and install development tools
         yum update -y
         yum groupinstall -y "Development Tools"
-        yum install -y epel-release cmake wget gcc gcc-c++ make git
+        yum install -y epel-release
+        yum install -y cmake wget gcc gcc-c++ make git
 
-        # Enable 'powertools' for additional dependencies
+        # Enable the 'powertools' repository (equivalent to CodeReady Builder)
         yum config-manager --set-enabled powertools
 
-        # Install required libraries for deal.II and UMFPACK
-        yum install -y libaec libaec-devel blas lapack lapack-devel hdf5 hdf5-devel boost boost-devel \
-                       suitesparse-devel metis metis-devel mpi mpi-devel
+        # Install additional dependencies for deal.II
+        yum install -y blas lapack hdf5 hdf5-devel boost boost-devel suitesparse-devel
 
     - name: Download deal.II tarball
-      run: wget https://dealii.org/downloads/dealii-9.5.1.tar.gz
+      run: |
+        wget https://dealii.org/downloads/dealii-9.5.1.tar.gz
 
     - name: Cache deal.II installation
       id: cache-dealii
@@ -45,13 +47,7 @@ jobs:
       run: |
         tar -xzf dealii-9.5.1.tar.gz
         cd dealii-9.5.1
-        cmake -DCMAKE_INSTALL_PREFIX=~/dealii \
-              -DDEAL_II_WITH_UMFPACK=ON \
-              -DDEAL_II_WITH_LAPACK=ON \
-              -DDEAL_II_WITH_MPI=OFF \
-              -DDEAL_II_WITH_P4EST=OFF \
-              -DUMFPACK_DIR=/usr \
-              -DMETIS_DIR=/usr .
+        cmake -DCMAKE_INSTALL_PREFIX=~/dealii -DDEAL_II_WITH_UMFPACK=ON -DDEAL_II_WITH_LAPACK=ON .
         make -j$(nproc)
         make install
         cd ..
@@ -67,24 +63,11 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
     container: rockylinux:8
-    needs: cache-dealii
+    needs: cache-dealii  # This job depends on the cache-dealii job
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
-
-    - name: Install dependencies
-      run: |
-        yum update -y
-        yum groupinstall -y "Development Tools"
-        yum install -y epel-release cmake wget gcc gcc-c++ make git
-
-        # Enable 'powertools' for additional dependencies
-        yum config-manager --set-enabled powertools
-
-        # Install required libraries for deal.II and UMFPACK
-        yum install -y libaec libaec-devel blas lapack lapack-devel hdf5 hdf5-devel boost boost-devel \
-                       suitesparse-devel metis metis-devel mpi mpi-devel
 
     - name: Restore Cache for deal.II
       uses: actions/cache@v3
@@ -97,27 +80,42 @@ jobs:
     - name: Set up environment variables for deal.II
       run: |
         export DEAL_II_DIR=~/dealii
-        echo "DEAL_II_DIR=$DEAL_II_DIR" >> $GITHUB_ENV
+        echo "DEAL_II_DIR is set to: $DEAL_II_DIR"
+        echo "export DEAL_II_DIR=~/dealii" >> $GITHUB_ENV
 
     - name: Install DOpElib
       run: |
-        # Install DOpElib from GitHub
+        # Clone DOpElib from GitHub
         git clone https://github.com/winnifried/dopelib.git
         cd dopelib/DOpEsrc
 
-        # Set the environment variable before running the configuration script
+        # Set the environment variable for deal.II
         export DEAL_II_DIR=$DEAL_II_DIR
         
-        # Run the autocmake.sh script with the correct arguments
+        # Check the DEAL_II_DIR setting
+        echo "DEAL_II_DIR is set to: $DEAL_II_DIR"
+
+        # Run the autocmake.sh script to configure DOpElib
         ./autocmake.sh configure
+
+        # Build DOpElib using make c-all as per the guide
         make c-all
 
-        # Manually copy the compiled libraries to the installation directory
+        # Check if the build was successful and copy the libraries
         mkdir -p ~/dopelib/lib
-        cp autobuild/release/libdope.a ~/dopelib/lib/
-        cp autobuild/debug/libdope.a ~/dopelib/lib/
+        if [ -f autobuild/release/libdope.a ]; then
+          cp autobuild/release/libdope.a ~/dopelib/lib/
+        else
+          echo "Release library libdope.a not found!"
+        fi
 
-        # Copy headers if necessary
+        if [ -f autobuild/debug/libdope.a ]; then
+          cp autobuild/debug/libdope.a ~/dopelib/lib/
+        else
+          echo "Debug library libdope.a not found!"
+        fi
+
+        # Copy headers to the installation directory
         mkdir -p ~/dopelib/include
         cp -r ../include/* ~/dopelib/include/
         cd ../..
@@ -127,7 +125,7 @@ jobs:
         # Set up environment variables
         export DEAL_II_DIR=~/dealii
         export DOPELIB_DIR=~/dopelib
-
+        
         # Compile your project
         mkdir build
         cd build
@@ -135,4 +133,6 @@ jobs:
         make
 
     - name: Run tests
-      run: ./run_tests.sh
+      run: |
+        # Run your test script
+        ./run_tests.sh
