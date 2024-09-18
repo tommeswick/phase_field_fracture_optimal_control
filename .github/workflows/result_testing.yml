@@ -21,13 +21,10 @@ jobs:
         yum update -y
         yum groupinstall -y "Development Tools"
         yum install -y epel-release
-        yum config-manager --set-enabled powertools  # Enable CodeReady Builder (crb)
+        yum config-manager --set-enabled powertools  # Enable PowerTools
         
         # Install necessary dependencies
         yum install -y cmake wget gcc gcc-c++ make git
-
-        # Enable the 'powertools' repository (equivalent to CodeReady Builder)
-        yum config-manager --set-enabled powertools
 
     - name: Build and Install libaec from Source
       run: |
@@ -35,10 +32,11 @@ jobs:
         wget https://gitlab.dkrz.de/k202009/libaec/-/archive/v1.0.6/libaec-v1.0.6.tar.gz
         tar -xzf libaec-v1.0.6.tar.gz
         cd libaec-v1.0.6
-        ./configure
+        mkdir build && cd build
+        cmake ..
         make
         make install
-        cd ..
+        cd ../..
 
     - name: Install remaining dependencies
       run: |
@@ -92,7 +90,7 @@ jobs:
         yum update -y
         yum install -y epel-release
         yum groupinstall -y "Development Tools"
-        yum config-manager --set-enabled powertools  # Enable CodeReady Builder (crb)
+        yum config-manager --set-enabled powertools  # Enable PowerTools
         yum install -y cmake wget gcc gcc-c++ make git blas lapack hdf5 hdf5-devel boost boost-devel suitesparse
 
     - name: Restore Cache for deal.II
