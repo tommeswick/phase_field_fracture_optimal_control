@@ -8,8 +8,8 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest  # CentOS 7 is not directly available on GitHub Actions, using `ubuntu-latest` as a base
-    container: centos:7     # Use a CentOS 7 container to mimic the CentOS environment
+    runs-on: ubuntu-latest
+    container: rockylinux:8  # Use Rocky Linux 8, compatible with CentOS 8
 
     steps:
     - name: Checkout code
@@ -22,7 +22,7 @@ jobs:
         yum groupinstall -y "Development Tools"
         yum install -y epel-release
         yum install -y cmake wget gcc gcc-c++ make
-    
+        
         # Install additional dependencies for deal.II
         yum install -y blas lapack hdf5 hdf5-devel boost boost-devel
 
