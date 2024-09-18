@@ -26,7 +26,7 @@ jobs:
 
         # Install required libraries for deal.II and UMFPACK
         yum install -y libaec libaec-devel blas lapack hdf5 hdf5-devel boost boost-devel \
-                       suitesparse-devel metis metis-devel mpi mpi-devel trilinos-devel
+                       suitesparse-devel metis metis-devel mpi mpi-devel
 
     - name: Download deal.II tarball
       run: wget https://dealii.org/downloads/dealii-9.5.1.tar.gz
@@ -47,11 +47,9 @@ jobs:
         cd dealii-9.5.1
         cmake -DCMAKE_INSTALL_PREFIX=~/dealii \
               -DDEAL_II_WITH_UMFPACK=ON \
-              -DDEAL_II_WITH_TRILINOS=ON \
               -DDEAL_II_WITH_MPI=ON \
               -DDEAL_II_WITH_P4EST=ON \
               -DUMFPACK_DIR=/usr \
-              -DTRILINOS_DIR=/usr \
               -DMETIS_DIR=/usr .
         make -j$(nproc)
         make install
@@ -85,7 +83,7 @@ jobs:
 
         # Install required libraries for deal.II and UMFPACK
         yum install -y libaec libaec-devel blas lapack hdf5 hdf5-devel boost boost-devel \
-                       suitesparse-devel metis metis-devel mpi mpi-devel trilinos-devel
+                       suitesparse-devel metis metis-devel mpi mpi-devel
 
     - name: Restore Cache for deal.II
       uses: actions/cache@v3
