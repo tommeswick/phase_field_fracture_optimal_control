@@ -27,7 +27,14 @@ jobs:
         yum config-manager --set-enabled powertools
 
         # Install additional dependencies for deal.II
-        yum install -y blas lapack hdf5 hdf5-devel boost boost-devel suitesparse
+        # Install libaec to provide libsz.so.2
+        yum install -y libaec libaec-devel
+
+        # Install HDF5 with --nobest to avoid version conflicts
+        yum install -y hdf5 hdf5-devel --nobest
+
+        # Install other dependencies
+        yum install -y blas lapack boost boost-devel suitesparse
 
     - name: Download deal.II tarball
       run: |
@@ -75,7 +82,7 @@ jobs:
         yum update -y
         yum install -y epel-release
         yum groupinstall -y "Development Tools"
-        yum install -y cmake wget gcc gcc-c++ make git blas lapack hdf5 hdf5-devel boost boost-devel suitesparse
+        yum install -y cmake wget gcc gcc-c++ make git blas lapack hdf5 hdf5-devel boost boost-devel suitesparse libaec libaec-devel --nobest
 
     - name: Restore Cache for deal.II
       uses: actions/cache@v3
