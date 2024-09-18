@@ -15,6 +15,10 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    - name: Download deal.II tarball
+      run: |
+        wget https://dealii.org/downloads/dealii-9.5.1.tar.gz
+
     - name: Cache deal.II installation
       uses: actions/cache@v3
       with:
@@ -43,7 +47,6 @@ jobs:
     - name: Install deal.II (if not cached)
       if: steps.cache-dealii.outputs.cache-hit != 'true'
       run: |
-        wget https://dealii.org/downloads/dealii-9.5.1.tar.gz
         tar -xzf dealii-9.5.1.tar.gz
         cd dealii-9.5.1
         cmake -DCMAKE_INSTALL_PREFIX=~/dealii .
@@ -52,8 +55,7 @@ jobs:
         cd ..
 
     - name: Set up environment variables for deal.II
-      run: |
-        export DEAL_II_DIR=~/dealii
+      run: echo "export DEAL_II_DIR=~/dealii" >> $GITHUB_ENV
 
     - name: Install DOpElib
       run: |
