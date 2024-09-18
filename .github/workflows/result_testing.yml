@@ -21,7 +21,7 @@ jobs:
         yum update -y
         yum groupinstall -y "Development Tools"
         yum install -y epel-release
-        yum config-manager --set-enabled crb  # Enable CodeReady Builder (crb)
+        yum config-manager --set-enabled powertools  # Enable CodeReady Builder (crb)
         
         # Install necessary dependencies
         yum install -y cmake wget gcc gcc-c++ make git
@@ -92,7 +92,7 @@ jobs:
         yum update -y
         yum install -y epel-release
         yum groupinstall -y "Development Tools"
-        yum config-manager --set-enabled crb  # Enable CodeReady Builder (crb)
+        yum config-manager --set-enabled powertools  # Enable CodeReady Builder (crb)
         yum install -y cmake wget gcc gcc-c++ make git blas lapack hdf5 hdf5-devel boost boost-devel suitesparse
 
     - name: Restore Cache for deal.II
