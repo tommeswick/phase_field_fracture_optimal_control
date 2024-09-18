@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 jobs:
-  build:
+  cache-dealii:
     runs-on: ubuntu-latest
     container: rockylinux:8  # Use Rocky Linux 8 container
 
@@ -55,14 +55,33 @@ jobs:
         make install
         cd ..
 
-    - name: Verify deal.II Cache and Set Environment Variable
+    - name: Verify deal.II Cache
       run: |
         if [ -d "~/dealii" ]; then
           echo "deal.II is cached in ~/dealii."
         else
           echo "deal.II directory not found!"
         fi
-        echo "export DEAL_II_DIR=~/dealii" >> $GITHUB_ENV
+
+  build-and-test:
+    runs-on: ubuntu-latest
+    container: rockylinux:8
+    needs: cache-dealii  # This job depends on the cache-dealii job
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Restore Cache for deal.II
+      uses: actions/cache@v3
+      with:
+        path: ~/dealii
+        key: dealii-9.5.1-${{ runner.os }}-${{ hashFiles('dealii-9.5.1.tar.gz') }}
+        restore-keys: |
+          dealii-9.5.1-${{ runner.os }}-
+
+    - name: Set up environment variables for deal.II
+      run: echo "export DEAL_II_DIR=~/dealii" >> $GITHUB_ENV
 
     - name: Install DOpElib
       run: |
