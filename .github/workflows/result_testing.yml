@@ -72,6 +72,23 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    - name: Install dependencies
+      run: |
+        # Install dependencies again in this job
+        yum update -y
+        yum groupinstall -y "Development Tools"
+        yum install -y epel-release
+        yum install -y cmake wget gcc gcc-c++ make git
+
+        # Enable the 'powertools' repository
+        yum config-manager --set-enabled powertools
+
+        # Install libaec to provide libsz.so.2 for HDF5
+        yum install -y libaec libaec-devel
+
+        # Install additional dependencies for deal.II
+        yum install -y blas lapack hdf5 hdf5-devel boost boost-devel
+
     - name: Restore Cache for deal.II
       uses: actions/cache@v3
       with:
