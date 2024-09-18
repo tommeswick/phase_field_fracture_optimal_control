@@ -47,8 +47,8 @@ jobs:
         cd dealii-9.5.1
         cmake -DCMAKE_INSTALL_PREFIX=~/dealii \
               -DDEAL_II_WITH_UMFPACK=ON \
-              -DDEAL_II_WITH_MPI=ON \
-              -DDEAL_II_WITH_P4EST=ON \
+              -DDEAL_II_WITH_MPI=OFF \
+              -DDEAL_II_WITH_P4EST=OFF \
               -DUMFPACK_DIR=/usr \
               -DMETIS_DIR=/usr .
         make -j$(nproc)
