@@ -15,6 +15,14 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    - name: Cache deal.II installation
+      uses: actions/cache@v3
+      with:
+        path: ~/dealii
+        key: dealii-9.5.1-${{ runner.os }}-${{ hashFiles('dealii-9.5.1.tar.gz') }}
+        restore-keys: |
+          dealii-9.5.1-${{ runner.os }}-
+
     - name: Install dependencies
       run: |
         # Update packages and install development tools
@@ -32,23 +40,36 @@ jobs:
         # Install additional dependencies for deal.II
         yum install -y blas lapack hdf5 hdf5-devel boost boost-devel
 
-        # Install deal.II
+    - name: Install deal.II (if not cached)
+      if: steps.cache-dealii.outputs.cache-hit != 'true'
+      run: |
         wget https://dealii.org/downloads/dealii-9.5.1.tar.gz
         tar -xzf dealii-9.5.1.tar.gz
         cd dealii-9.5.1
         cmake -DCMAKE_INSTALL_PREFIX=~/dealii .
         make -j$(nproc)
         make install
-        export DEAL_II_DIR=~/dealii
         cd ..
 
-        # Install DOpElib
+    - name: Set up environment variables for deal.II
+      run: |
+        export DEAL_II_DIR=~/dealii
+
+    - name: Install DOpElib
+      run: |
+        # Install DOpElib from GitHub
         git clone https://github.com/winnifried/dopelib.git
         cd dopelib/DOpEsrc
-        cmake -DCMAKE_INSTALL_PREFIX=~/dopelib .
-        make -j$(nproc)
-        make install
-        cd ..
+        # Run c-all to build libraries
+        make c-all
+        # Manually copy the compiled libraries to the installation directory
+        mkdir -p ~/dopelib/lib
+        cp autobuild/release/libdope.a ~/dopelib/lib/
+        cp autobuild/debug/libdope.a ~/dopelib/lib/
+        # Copy headers if necessary
+        mkdir -p ~/dopelib/include
+        cp -r ../include/* ~/dopelib/include/
+        cd ../..
 
     - name: Build the project
       run: |
@@ -56,7 +77,7 @@ jobs:
         export DEAL_II_DIR=~/dealii
         export DOPELIB_DIR=~/dopelib
         
-        # Compile your project (adjust according to your setup)
+        # Compile your project
         mkdir build
         cd build
         cmake ..
