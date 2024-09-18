@@ -39,11 +39,12 @@ jobs:
         cmake -DCMAKE_INSTALL_PREFIX=~/dealii .
         make -j$(nproc)
         make install
+        export DEAL_II_DIR=~/dealii
         cd ..
 
         # Install DOpElib
         git clone https://github.com/winnifried/dopelib.git
-        cd dopelib
+        cd dopelib/DOpEsrc
         cmake -DCMAKE_INSTALL_PREFIX=~/dopelib .
         make -j$(nproc)
         make install
