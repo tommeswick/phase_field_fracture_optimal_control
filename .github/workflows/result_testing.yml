@@ -9,7 +9,7 @@ on:
 jobs:
   cache-dealii:
     runs-on: ubuntu-latest
-    container: rockylinux:8  # Use Rocky Linux 8 container
+    container: rockylinux:8
 
     steps:
     - name: Checkout code
@@ -17,18 +17,12 @@ jobs:
 
     - name: Install dependencies
       run: |
-        # Update packages and install development tools
         yum update -y
         yum groupinstall -y "Development Tools"
-        yum install -y epel-release
-        yum config-manager --set-enabled powertools  # Enable PowerTools
-        
-        # Install necessary dependencies
-        yum install -y cmake wget gcc gcc-c++ make git
+        yum install -y epel-release cmake wget gcc gcc-c++ make git
 
     - name: Build and Install libaec from Source
       run: |
-        # Download and build libaec from source
         wget https://gitlab.dkrz.de/k202009/libaec/-/archive/v1.0.6/libaec-v1.0.6.tar.gz
         tar -xzf libaec-v1.0.6.tar.gz
         cd libaec-v1.0.6
@@ -40,7 +34,6 @@ jobs:
 
     - name: Install remaining dependencies
       run: |
-        # Install additional dependencies for deal.II
         yum install -y hdf5 hdf5-devel --nobest
         yum install -y blas lapack boost boost-devel suitesparse
 
@@ -67,10 +60,11 @@ jobs:
         make install
         cd ..
 
-    - name: Verify deal.II Cache
+    - name: Verify deal.II Cache and Set Environment Variable
       run: |
         if [ -d "~/dealii" ]; then
           echo "deal.II is cached in ~/dealii."
+          echo "DEAL_II_DIR=~/dealii" >> $GITHUB_ENV
         else
           echo "deal.II directory not found!"
         fi
@@ -78,7 +72,7 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
     container: rockylinux:8
-    needs: cache-dealii  # This job depends on the cache-dealii job
+    needs: cache-dealii
 
     steps:
     - name: Checkout code
@@ -86,12 +80,8 @@ jobs:
 
     - name: Install dependencies
       run: |
-        # Install necessary packages for this job
         yum update -y
-        yum install -y epel-release
-        yum groupinstall -y "Development Tools"
-        yum config-manager --set-enabled powertools  # Enable PowerTools
-        yum install -y cmake wget gcc gcc-c++ make git blas lapack hdf5 hdf5-devel boost boost-devel suitesparse
+        yum install -y epel-release cmake wget gcc gcc-c++ make git blas lapack hdf5 hdf5-devel boost boost-devel suitesparse
 
     - name: Restore Cache for deal.II
       uses: actions/cache@v3
@@ -101,11 +91,8 @@ jobs:
         restore-keys: |
           dealii-9.5.1-with-umfpack-${{ runner.os }}-
 
-    - name: Set up environment variables for deal.II
-      run: |
-        export DEAL_II_DIR=~/dealii
-        echo "DEAL_II_DIR is set to: $DEAL_II_DIR"
-        echo "export DEAL_II_DIR=~/dealii" >> $GITHUB_ENV
+    - name: Check DEAL_II_DIR Environment Variable
+      run: echo "DEAL_II_DIR is set to: $DEAL_II_DIR"
 
     - name: Install DOpElib
       run: |
@@ -113,9 +100,6 @@ jobs:
         git clone https://github.com/winnifried/dopelib.git
         cd dopelib/DOpEsrc
 
-        # Set the environment variable for deal.II
-        export DEAL_II_DIR=$DEAL_II_DIR
-        
         # Check the DEAL_II_DIR setting
         echo "DEAL_II_DIR is set to: $DEAL_II_DIR"
 
