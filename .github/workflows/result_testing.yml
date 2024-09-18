@@ -21,7 +21,7 @@ jobs:
         yum update -y
         yum groupinstall -y "Development Tools"
         yum install -y epel-release
-        yum install -y cmake wget gcc gcc-c++ make
+        yum install -y cmake wget gcc gcc-c++ make git
 
         # Enable the 'powertools' repository (equivalent to CodeReady Builder)
         yum config-manager --set-enabled powertools
