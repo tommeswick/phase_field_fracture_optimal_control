@@ -27,7 +27,7 @@ jobs:
         yum config-manager --set-enabled powertools
 
         # Install additional dependencies for deal.II
-        yum install -y blas lapack hdf5 hdf5-devel boost boost-devel suitesparse-devel
+        yum install -y blas lapack hdf5 hdf5-devel boost boost-devel suitesparse
 
     - name: Download deal.II tarball
       run: |
@@ -75,7 +75,7 @@ jobs:
         yum update -y
         yum install -y epel-release
         yum groupinstall -y "Development Tools"
-        yum install -y cmake wget gcc gcc-c++ make git blas lapack hdf5 hdf5-devel boost boost-devel suitesparse-devel
+        yum install -y cmake wget gcc gcc-c++ make git blas lapack hdf5 hdf5-devel boost boost-devel suitesparse
 
     - name: Restore Cache for deal.II
       uses: actions/cache@v3
