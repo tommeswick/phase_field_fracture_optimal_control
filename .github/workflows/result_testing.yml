@@ -45,7 +45,7 @@ jobs:
       id: cache-dealii
       uses: actions/cache@v3
       with:
-        path: ~/dealii
+        path: /opt/dealii
         key: dealii-9.5.1-with-umfpack-${{ runner.os }}-${{ hashFiles('dealii-9.5.1.tar.gz') }}
         restore-keys: |
           dealii-9.5.1-with-umfpack-${{ runner.os }}-
@@ -55,17 +55,13 @@ jobs:
       run: |
         tar -xzf dealii-9.5.1.tar.gz
         cd dealii-9.5.1
-        cmake -DCMAKE_INSTALL_PREFIX=~/dealii -DDEAL_II_WITH_UMFPACK=ON -DDEAL_II_WITH_LAPACK=ON .
+        cmake -DCMAKE_INSTALL_PREFIX=/opt/dealii -DDEAL_II_WITH_UMFPACK=ON -DDEAL_II_WITH_LAPACK=ON .
         make -j$(nproc)
         make install
         cd ..
 
-    - name: Set DEAL_II_DIR Output
-      run: echo "DEAL_II_DIR=~/dealii" >> $GITHUB_ENV
-
-    - name: Pass DEAL_II_DIR as output to next job
-      id: set-output
-      run: echo "::set-output name=deal_ii_dir::~/dealii"
+    - name: Pass DEAL_II_DIR to next job
+      run: echo "DEAL_II_DIR=/opt/dealii" >> $GITHUB_ENV
 
   build-and-test:
     runs-on: ubuntu-latest
@@ -84,13 +80,13 @@ jobs:
     - name: Restore Cache for deal.II
       uses: actions/cache@v3
       with:
-        path: ~/dealii
+        path: /opt/dealii
         key: dealii-9.5.1-with-umfpack-${{ runner.os }}-${{ hashFiles('dealii-9.5.1.tar.gz') }}
         restore-keys: |
           dealii-9.5.1-with-umfpack-${{ runner.os }}-
 
     - name: Set up DEAL_II_DIR Environment Variable
-      run: echo "DEAL_II_DIR=${{ needs.cache-dealii.outputs.deal_ii_dir }}" >> $GITHUB_ENV
+      run: echo "DEAL_II_DIR=/opt/dealii" >> $GITHUB_ENV
 
     - name: Check DEAL_II_DIR Environment Variable
       run: echo "DEAL_II_DIR is set to: $DEAL_II_DIR"
