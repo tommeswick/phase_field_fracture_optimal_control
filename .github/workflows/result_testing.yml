@@ -60,14 +60,12 @@ jobs:
         make install
         cd ..
 
-    - name: Verify deal.II Cache and Set Environment Variable
-      run: |
-        if [ -d "~/dealii" ]; then
-          echo "deal.II is cached in ~/dealii."
-          echo "DEAL_II_DIR=~/dealii" >> $GITHUB_ENV
-        else
-          echo "deal.II directory not found!"
-        fi
+    - name: Set DEAL_II_DIR Output
+      run: echo "DEAL_II_DIR=~/dealii" >> $GITHUB_ENV
+
+    - name: Pass DEAL_II_DIR as output to next job
+      id: set-output
+      run: echo "::set-output name=deal_ii_dir::~/dealii"
 
   build-and-test:
     runs-on: ubuntu-latest
@@ -90,6 +88,9 @@ jobs:
         key: dealii-9.5.1-with-umfpack-${{ runner.os }}-${{ hashFiles('dealii-9.5.1.tar.gz') }}
         restore-keys: |
           dealii-9.5.1-with-umfpack-${{ runner.os }}-
+
+    - name: Set up DEAL_II_DIR Environment Variable
+      run: echo "DEAL_II_DIR=${{ needs.cache-dealii.outputs.deal_ii_dir }}" >> $GITHUB_ENV
 
     - name: Check DEAL_II_DIR Environment Variable
       run: echo "DEAL_II_DIR is set to: $DEAL_II_DIR"
@@ -131,7 +132,7 @@ jobs:
     - name: Build the project
       run: |
         # Set up environment variables
-        export DEAL_II_DIR=~/dealii
+        export DEAL_II_DIR=$DEAL_II_DIR
         export DOPELIB_DIR=~/dopelib
         
         # Compile your project
