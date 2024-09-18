@@ -24,8 +24,9 @@ jobs:
         # Enable 'powertools' for additional dependencies
         yum config-manager --set-enabled powertools
 
-        # Install required libraries for deal.II
-        yum install -y libaec libaec-devel blas lapack hdf5 hdf5-devel boost boost-devel
+        # Install required libraries for deal.II and UMFPACK
+        yum install -y libaec libaec-devel blas lapack hdf5 hdf5-devel boost boost-devel \
+                       suitesparse-devel metis metis-devel mpi mpi-devel trilinos-devel
 
     - name: Download deal.II tarball
       run: wget https://dealii.org/downloads/dealii-9.5.1.tar.gz
@@ -35,16 +36,23 @@ jobs:
       uses: actions/cache@v3
       with:
         path: ~/dealii
-        key: dealii-9.5.1-${{ runner.os }}-${{ hashFiles('dealii-9.5.1.tar.gz') }}
+        key: dealii-9.5.1-with-umfpack-${{ runner.os }}-${{ hashFiles('dealii-9.5.1.tar.gz') }}
         restore-keys: |
-          dealii-9.5.1-${{ runner.os }}-
+          dealii-9.5.1-with-umfpack-${{ runner.os }}-
 
     - name: Install deal.II (if not cached)
       if: steps.cache-dealii.outputs.cache-hit != 'true'
       run: |
         tar -xzf dealii-9.5.1.tar.gz
         cd dealii-9.5.1
-        cmake -DCMAKE_INSTALL_PREFIX=~/dealii .
+        cmake -DCMAKE_INSTALL_PREFIX=~/dealii \
+              -DDEAL_II_WITH_UMFPACK=ON \
+              -DDEAL_II_WITH_TRILINOS=ON \
+              -DDEAL_II_WITH_MPI=ON \
+              -DDEAL_II_WITH_P4EST=ON \
+              -DUMFPACK_DIR=/usr \
+              -DTRILINOS_DIR=/usr \
+              -DMETIS_DIR=/usr .
         make -j$(nproc)
         make install
         cd ..
@@ -75,16 +83,17 @@ jobs:
         # Enable 'powertools' for additional dependencies
         yum config-manager --set-enabled powertools
 
-        # Install required libraries for deal.II
-        yum install -y libaec libaec-devel blas lapack hdf5 hdf5-devel boost boost-devel
+        # Install required libraries for deal.II and UMFPACK
+        yum install -y libaec libaec-devel blas lapack hdf5 hdf5-devel boost boost-devel \
+                       suitesparse-devel metis metis-devel mpi mpi-devel trilinos-devel
 
     - name: Restore Cache for deal.II
       uses: actions/cache@v3
       with:
         path: ~/dealii
-        key: dealii-9.5.1-${{ runner.os }}-${{ hashFiles('dealii-9.5.1.tar.gz') }}
+        key: dealii-9.5.1-with-umfpack-${{ runner.os }}-${{ hashFiles('dealii-9.5.1.tar.gz') }}
         restore-keys: |
-          dealii-9.5.1-${{ runner.os }}-
+          dealii-9.5.1-with-umfpack-${{ runner.os }}-
 
     - name: Set up environment variables for deal.II
       run: |
