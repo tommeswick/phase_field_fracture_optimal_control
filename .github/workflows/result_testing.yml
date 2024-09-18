@@ -33,7 +33,7 @@ jobs:
         yum install -y blas lapack hdf5 hdf5-devel boost boost-devel
 
         # Install deal.II
-        wget https://www.dealii.org/download/dealii-9.5.1.tar.gz
+        wget https://dealii.org/downloads/dealii-9.5.1.tar.gz
         tar -xzf dealii-9.5.1.tar.gz
         cd dealii-9.5.1
         cmake -DCMAKE_INSTALL_PREFIX=~/dealii .
