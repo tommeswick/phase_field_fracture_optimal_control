@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # CentOS 7 is not directly available on GitHub Actions, using `ubuntu-latest` as a base
+    container: centos:7     # Use a CentOS 7 container to mimic the CentOS environment
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install dependencies
+      run: |
+        # Update packages and install development tools
+        yum update -y
+        yum groupinstall -y "Development Tools"
+        yum install -y epel-release
+        yum install -y cmake wget gcc gcc-c++ make
+    
+        # Install additional dependencies for deal.II
+        yum install -y blas lapack hdf5 hdf5-devel boost boost-devel
+
+        # Install deal.II
+        wget https://www.dealii.org/download/dealii-9.5.1.tar.gz
+        tar -xzf dealii-9.5.1.tar.gz
+        cd dealii-9.5.1
+        cmake -DCMAKE_INSTALL_PREFIX=~/dealii .
+        make -j$(nproc)
+        make install
+        cd ..
+
+        # Install DOpElib
+        git clone https://github.com/winnifried/dopelib.git
+        cd dopelib
+        cmake -DCMAKE_INSTALL_PREFIX=~/dopelib .
+        make -j$(nproc)
+        make install
+        cd ..
+
+    - name: Build the project
+      run: |
+        # Set up environment variables
+        export DEAL_II_DIR=~/dealii
+        export DOPELIB_DIR=~/dopelib
+        
+        # Compile your project (adjust according to your setup)
+        mkdir build
+        cd build
+        cmake ..
+        make
+
+    - name: Run tests
+      run: |
+        # Run your test script
+        ./run_tests.sh
