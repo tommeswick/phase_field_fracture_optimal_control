@@ -68,6 +68,9 @@ jobs:
     container: rockylinux:8
     needs: cache-dealii
 
+    env:
+      DEAL_II_DIR: /opt/dealii  # Set environment variable for the entire job
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
@@ -85,20 +88,11 @@ jobs:
         restore-keys: |
           dealii-9.5.1-with-umfpack-${{ runner.os }}-
 
-    - name: Set up DEAL_II_DIR Environment Variable
-      run: echo "DEAL_II_DIR=/opt/dealii" >> $GITHUB_ENV
-
-    - name: Check DEAL_II_DIR Environment Variable
-      run: echo "DEAL_II_DIR is set to: $DEAL_II_DIR"
-
     - name: Install DOpElib
       run: |
         # Clone DOpElib from GitHub
         git clone https://github.com/winnifried/dopelib.git
         cd dopelib/DOpEsrc
-
-        # Check the DEAL_II_DIR setting
-        echo "DEAL_II_DIR is set to: $DEAL_II_DIR"
 
         # Run the autocmake.sh script to configure DOpElib
         ./autocmake.sh configure
@@ -128,7 +122,6 @@ jobs:
     - name: Build the project
       run: |
         # Set up environment variables
-        export DEAL_II_DIR=$DEAL_II_DIR
         export DOPELIB_DIR=~/dopelib
         
         # Compile your project
