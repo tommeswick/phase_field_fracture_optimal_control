@@ -97,8 +97,11 @@ jobs:
         git clone https://github.com/winnifried/dopelib.git
         cd dopelib/DOpEsrc
 
-        # Run c-all to build libraries, explicitly passing DEAL_II_DIR to cmake
-        ./autocmake.sh configure -DDEAL_II_DIR=$DEAL_II_DIR
+        # Set the environment variable before running the configuration script
+        export DEAL_II_DIR=$DEAL_II_DIR
+        
+        # Run the autocmake.sh script with the correct arguments
+        ./autocmake.sh configure
         make c-all
 
         # Manually copy the compiled libraries to the installation directory
