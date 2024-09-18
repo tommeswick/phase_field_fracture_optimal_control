@@ -23,8 +23,8 @@ jobs:
         yum install -y epel-release
         yum install -y cmake wget gcc gcc-c++ make
 
-        # Enable the CRB (CodeReady Builder) repository to access additional packages
-        dnf config-manager --set-enabled crb
+        # Enable the 'powertools' repository (equivalent to CodeReady Builder)
+        yum config-manager --set-enabled powertools
 
         # Install libaec to provide libsz.so.2 for HDF5
         yum install -y libaec libaec-devel
