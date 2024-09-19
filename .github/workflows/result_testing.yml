@@ -25,7 +25,6 @@ jobs:
         
         # Install necessary dependencies
         yum install -y cmake wget gcc gcc-c++ make git
-
     - name: Build and Install libaec from Source
       run: |
         # Download and build libaec from source
@@ -37,22 +36,18 @@ jobs:
         make
         make install
         cd ../..
-
     - name: Install remaining dependencies
       run: |
         # Install additional dependencies for deal.II
         yum install -y hdf5 hdf5-devel --nobest
-        yum install -y blas lapack boost boost-devel suitesparse suitesparse-devel
-
+        yum install -y blas lapack boost boost-devel suitesparse suitesparse-devel metis metis-devel
         # Check if /usr/include/suitesparse exists, if not, create a symlink
         if [ ! -d "/usr/include/suitesparse" ]; then
           ln -s /usr/include /usr/include/suitesparse
         fi
-
     - name: Download deal.II tarball
       run: |
         wget https://dealii.org/downloads/dealii-9.5.1.tar.gz
-
     - name: Cache deal.II installation
       id: cache-dealii
       uses: actions/cache@v3
@@ -61,7 +56,6 @@ jobs:
         key: dealii-9.5.1-with-umfpack-${{ runner.os }}-${{ hashFiles('dealii-9.5.1.tar.gz') }}
         restore-keys: |
           dealii-9.5.1-with-umfpack-${{ runner.os }}-
-
     - name: Install deal.II (if not cached)
       if: steps.cache-dealii.outputs.cache-hit != 'true'
       run: |
@@ -71,12 +65,9 @@ jobs:
         make -j$(nproc)
         make install
         cd ..
-
     - name: Save deal.II Environment Variable
       run: |
         echo "DEAL_II_DIR=~/dealii" >> $GITHUB_ENV
-
-
     - name: Verify deal.II Cache
       run: |
         if [ -d "~/dealii" ]; then
@@ -101,17 +92,14 @@ jobs:
         yum install -y epel-release
         yum groupinstall -y "Development Tools"
         yum config-manager --set-enabled powertools  # Enable PowerTools
-        yum install -y cmake wget gcc gcc-c++ make git blas lapack lapack-devel hdf5 hdf5-devel boost boost-devel suitesparse suitesparse-devel
-
+        yum install -y cmake wget gcc gcc-c++ make git blas lapack lapack-devel hdf5 hdf5-devel boost boost-devel suitesparse suitesparse-devel metis metis-devel
         # Check if /usr/include/suitesparse exists, if not, create a symlink
         if [ ! -d "/usr/include/suitesparse" ]; then
           ln -s /usr/include /usr/include/suitesparse
         fi
-
         # Set environment variables to help find LAPACK
         export LD_LIBRARY_PATH=/usr/lib64:$LD_LIBRARY_PATH
         export LAPACK_DIR=/usr/lib64
-
     - name: Restore Cache for deal.II
       uses: actions/cache@v3
       with:
@@ -119,7 +107,6 @@ jobs:
         key: dealii-9.5.1-with-umfpack-${{ runner.os }}-${{ hashFiles('dealii-9.5.1.tar.gz') }}
         restore-keys: |
           dealii-9.5.1-with-umfpack-${{ runner.os }}-
-
     - name: Cache DOpElib installation
       id: cache-dopelib
       uses: actions/cache@v3
@@ -128,19 +115,16 @@ jobs:
         key: dopelib-cache-${{ runner.os }}
         restore-keys: |
           dopelib-cache-${{ runner.os }}
-
     - name: Set up environment variables for DOpElib
       run: |
         export DEAL_II_DIR=~/dealii
         echo "DEAL_II_DIR=$DEAL_II_DIR" >> $GITHUB_ENV
-
     - name: Install DOpElib (if not cached)
       if: steps.cache-dopelib.outputs.cache-hit != 'true'
       run: |
         # Clone DOpElib from GitHub
         git clone https://github.com/winnifried/dopelib.git ~/dopelib
         cd ~/dopelib/DOpEsrc
-
         # Set the environment variable for deal.II
         export DEAL_II_DIR=$DEAL_II_DIR
         
@@ -149,25 +133,21 @@ jobs:
         
         # Build DOpElib using make c-all as per the guide
         make c-all
-
         # Debugging: List the contents of the autobuild directories
         echo "Listing files in autobuild/release and autobuild/debug directories:"
         ls -R autobuild/release
         ls -R autobuild/debug
-
         # Copy the libraries to the expected location
         mkdir -p ~/dopelib/lib/cmake/DOpElib
         cp -r autobuild/release/* ~/dopelib/lib/cmake/DOpElib/ 2>/dev/null || echo "No files to copy from release."
         cp -r autobuild/debug/* ~/dopelib/lib/cmake/DOpElib/ 2>/dev/null || echo "No files to copy from debug."
-
         # Check if copying was successful
         echo "Listing ~/dopelib/lib/cmake/DOpElib/ contents:"
         ls ~/dopelib/lib/cmake/DOpElib/
-
     - name: Debug DOpElib Installation
       run: |
         echo "Listing ~/dopelib/lib/cmake/DOpElib/ contents:"
-        ls ~/dopelib/lib/cmake/DOpElib
+        ls ~/dopelib/lib/cmake/DOpElib/
         
   build-and-test:
     runs-on: ubuntu-latest
@@ -184,17 +164,14 @@ jobs:
         yum install -y epel-release
         yum groupinstall -y "Development Tools"
         yum config-manager --set-enabled powertools  # Enable PowerTools
-        yum install -y cmake wget gcc gcc-c++ make git blas lapack lapack-devel hdf5 hdf5-devel boost boost-devel suitesparse suitesparse-devel
-
+        yum install -y cmake wget gcc gcc-c++ make git blas lapack lapack-devel hdf5 hdf5-devel boost boost-devel suitesparse suitesparse-devel metis metis-devel
         # Check if /usr/include/suitesparse exists, if not, create a symlink
         if [ ! -d "/usr/include/suitesparse" ]; then
           ln -s /usr/include /usr/include/suitesparse
         fi
-
         # Set environment variables to help find LAPACK
         export LD_LIBRARY_PATH=/usr/lib64:$LD_LIBRARY_PATH
         export LAPACK_DIR=/usr/lib64
-
     - name: Restore Cache for deal.II
       uses: actions/cache@v3
       with:
@@ -202,7 +179,6 @@ jobs:
         key: dealii-9.5.1-with-umfpack-${{ runner.os }}-${{ hashFiles('dealii-9.5.1.tar.gz') }}
         restore-keys: |
           dealii-9.5.1-with-umfpack-${{ runner.os }}-
-
     - name: Restore Cache for DOpElib
       uses: actions/cache@v3
       with:
@@ -210,7 +186,6 @@ jobs:
         key: dopelib-cache-${{ runner.os }}
         restore-keys: |
           dopelib-cache-${{ runner.os }}
-
     - name: Set up environment variables for deal.II and DOpElib
       run: |
         export DEAL_II_DIR=~/dealii
@@ -218,24 +193,22 @@ jobs:
         echo "DEAL_II_DIR=$DEAL_II_DIR" >> $GITHUB_ENV
         echo "DOPELIB_DIR=$DOPELIB_DIR" >> $GITHUB_ENV
         echo "DOPE_DIR=$DOPELIB_DIR" >> $GITHUB_ENV
-
     - name: Build the project
       run: |
         # Set up environment variables
         export DEAL_II_DIR=~/dealii
         export DOPELIB_DIR=~/dopelib
         export DOPE_DIR=~/dopelib  # Set the DOPE_DIR environment variable
-
-        # Debugging step: Check the presence of LAPACK libraries
+        # Debugging step: Check the presence of LAPACK and METIS libraries
         echo "Listing LAPACK libraries:"
         ls /usr/lib64/liblapack*
-
+        echo "Listing METIS libraries:"
+        ls /usr/lib64/libmetis*
         # Compile your project
         mkdir build
         cd build
         cmake ..
         make
-
     - name: Run tests
       run: |
         # Run your test script
