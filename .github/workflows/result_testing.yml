@@ -175,13 +175,18 @@ jobs:
       run: |
         # Set up environment variables
         export DEAL_II_DIR=~/dealii
-        export DOPELIB_DIR=~/dopelib
-        
+        # export DOPELIB_DIR=~/dopelib
+        export DOPE_DIR=~/dopelib  # Set the DOPE_DIR environment variable
+
+        # Verify DOPE_DIR
+        echo "DOPE_DIR is set to: $DOPE_DIR"
+
         # Compile your project
         mkdir build
         cd build
         cmake ..
         make
+
 
     - name: Run tests
       run: |
