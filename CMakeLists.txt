@@ -19,18 +19,23 @@ SET(deal_dimension 2)
 #FIND_PACKAGE(DOpElib QUIET
 #  HINTS ${CMAKE_SOURCE_DIR}/../../../../ ${DOPE_DIR} $ENV{DOPE_DIR} $ENV{HOME}/DOpE
 #  )
+
 FIND_PACKAGE(DOpElib QUIET
   HINTS ${DOPE_DIR} ${CMAKE_SOURCE_DIR}/../../../../ $ENV{DOPE_DIR} $ENV{HOME}/DOpE
 )
- 
 IF(NOT ${DOpElib_FOUND})
   MESSAGE(FATAL_ERROR "\n"
-    "*** Could not locate DOpElib. ***\n\n"
-    "You may want to either pass a flag -DDOPE_DIR=/path/to/DOpE to cmake\n"
-    "or set an environment variable \"DOPE_DIR\" that contains this path.")
+    "*** Could not locate DOpElib. ***\n"
+    "Searching in the following paths:\n"
+    "  ${DOPE_DIR}\n"
+    "  ${CMAKE_SOURCE_DIR}/../../../../\n"
+    "  $ENV{DOPE_DIR}\n"
+    "  $ENV{HOME}/DOpE\n"
+  )
 ELSE()
   MESSAGE(STATUS "Found DOpElib at ${DOpE}.")
 ENDIF()
+
 
 Project(${TARGET} CXX)
 
