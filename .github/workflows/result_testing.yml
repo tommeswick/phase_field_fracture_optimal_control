@@ -80,7 +80,7 @@ jobs:
           echo "deal.II directory not found!"
         fi
 
-  build-and-test:
+  install-dopelib:
     runs-on: ubuntu-latest
     container: rockylinux:8
     needs: cache-dealii  # This job depends on the cache-dealii job
@@ -89,19 +89,23 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Install dependencies
+    - name: Install dependencies for DOpElib
       run: |
         # Install necessary packages for this job
         yum update -y
         yum install -y epel-release
         yum groupinstall -y "Development Tools"
         yum config-manager --set-enabled powertools  # Enable PowerTools
-        yum install -y cmake wget gcc gcc-c++ make git blas lapack hdf5 hdf5-devel boost boost-devel suitesparse suitesparse-devel
+        yum install -y cmake wget gcc gcc-c++ make git blas lapack lapack-devel hdf5 hdf5-devel boost boost-devel suitesparse suitesparse-devel
 
         # Check if /usr/include/suitesparse exists, if not, create a symlink
         if [ ! -d "/usr/include/suitesparse" ]; then
           ln -s /usr/include /usr/include/suitesparse
         fi
+
+        # Set environment variables to help find LAPACK
+        export LD_LIBRARY_PATH=/usr/lib64:$LD_LIBRARY_PATH
+        export LAPACK_DIR=/usr/lib64
 
     - name: Restore Cache for deal.II
       uses: actions/cache@v3
@@ -111,21 +115,14 @@ jobs:
         restore-keys: |
           dealii-9.5.1-with-umfpack-${{ runner.os }}-
 
-    - name: Restore Cache for DOpElib
+    - name: Cache DOpElib installation
+      id: cache-dopelib
       uses: actions/cache@v3
       with:
         path: ~/dopelib
         key: dopelib-cache-${{ runner.os }}
         restore-keys: |
           dopelib-cache-${{ runner.os }}
-
-    - name: Set up environment variables for deal.II and DOpElib
-      run: |
-        export DEAL_II_DIR=~/dealii
-        export DOPELIB_DIR=~/dopelib
-        echo "DEAL_II_DIR=$DEAL_II_DIR" >> $GITHUB_ENV
-        echo "DOPELIB_DIR=$DOPELIB_DIR" >> $GITHUB_ENV
-        echo "DOPE_DIR=$DOPELIB_DIR" >> $GITHUB_ENV
 
     - name: Install DOpElib (if not cached)
       if: steps.cache-dopelib.outputs.cache-hit != 'true'
@@ -162,10 +159,55 @@ jobs:
         echo "Listing ~/dopelib/lib/cmake/DOpElib/ contents:"
         ls ~/dopelib/lib/cmake/DOpElib
         
-    - name: Set up environment variables for deal.II
+  build-and-test:
+    runs-on: ubuntu-latest
+    container: rockylinux:8
+    needs: install-dopelib  # This job depends on the install-dopelib job
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install dependencies for build
+      run: |
+        yum update -y
+        yum install -y epel-release
+        yum groupinstall -y "Development Tools"
+        yum config-manager --set-enabled powertools  # Enable PowerTools
+        yum install -y cmake wget gcc gcc-c++ make git blas lapack lapack-devel hdf5 hdf5-devel boost boost-devel suitesparse suitesparse-devel
+
+        # Check if /usr/include/suitesparse exists, if not, create a symlink
+        if [ ! -d "/usr/include/suitesparse" ]; then
+          ln -s /usr/include /usr/include/suitesparse
+        fi
+
+        # Set environment variables to help find LAPACK
+        export LD_LIBRARY_PATH=/usr/lib64:$LD_LIBRARY_PATH
+        export LAPACK_DIR=/usr/lib64
+
+    - name: Restore Cache for deal.II
+      uses: actions/cache@v3
+      with:
+        path: ~/dealii
+        key: dealii-9.5.1-with-umfpack-${{ runner.os }}-${{ hashFiles('dealii-9.5.1.tar.gz') }}
+        restore-keys: |
+          dealii-9.5.1-with-umfpack-${{ runner.os }}-
+
+    - name: Restore Cache for DOpElib
+      uses: actions/cache@v3
+      with:
+        path: ~/dopelib
+        key: dopelib-cache-${{ runner.os }}
+        restore-keys: |
+          dopelib-cache-${{ runner.os }}
+
+    - name: Set up environment variables for deal.II and DOpElib
       run: |
         export DEAL_II_DIR=~/dealii
+        export DOPELIB_DIR=~/dopelib
         echo "DEAL_II_DIR=$DEAL_II_DIR" >> $GITHUB_ENV
+        echo "DOPELIB_DIR=$DOPELIB_DIR" >> $GITHUB_ENV
+        echo "DOPE_DIR=$DOPELIB_DIR" >> $GITHUB_ENV
 
     - name: Build the project
       run: |
@@ -174,16 +216,15 @@ jobs:
         export DOPELIB_DIR=~/dopelib
         export DOPE_DIR=~/dopelib  # Set the DOPE_DIR environment variable
 
-        # Debugging step
-        echo "Listing ~/dopelib/lib/cmake/DOpElib/ contents:"
-        ls ~/dopelib/lib/cmake/DOpElib/
+        # Debugging step: Check the presence of LAPACK libraries
+        echo "Listing LAPACK libraries:"
+        ls /usr/lib64/liblapack*
 
         # Compile your project
         mkdir build
         cd build
         cmake ..
         make
-
 
     - name: Run tests
       run: |
