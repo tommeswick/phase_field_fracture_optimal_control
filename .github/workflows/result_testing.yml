@@ -72,6 +72,11 @@ jobs:
         make install
         cd ..
 
+    - name: Save deal.II Environment Variable
+      run: |
+        echo "DEAL_II_DIR=~/dealii" >> $GITHUB_ENV
+
+
     - name: Verify deal.II Cache
       run: |
         if [ -d "~/dealii" ]; then
@@ -123,6 +128,11 @@ jobs:
         key: dopelib-cache-${{ runner.os }}
         restore-keys: |
           dopelib-cache-${{ runner.os }}
+
+    - name: Set up environment variables for DOpElib
+      run: |
+        export DEAL_II_DIR=~/dealii
+        echo "DEAL_II_DIR=$DEAL_II_DIR" >> $GITHUB_ENV
 
     - name: Install DOpElib (if not cached)
       if: steps.cache-dopelib.outputs.cache-hit != 'true'
