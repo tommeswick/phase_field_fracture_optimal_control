@@ -16,9 +16,13 @@ SET(deal_dimension 2)
 #The ../../../../ is included first to make shure we always use 
 # the dope shipped with the examples - unless we specifically move the 
 # directory
+#FIND_PACKAGE(DOpElib QUIET
+#  HINTS ${CMAKE_SOURCE_DIR}/../../../../ ${DOPE_DIR} $ENV{DOPE_DIR} $ENV{HOME}/DOpE
+#  )
 FIND_PACKAGE(DOpElib QUIET
-  HINTS ${CMAKE_SOURCE_DIR}/../../../../ ${DOPE_DIR} $ENV{DOPE_DIR} $ENV{HOME}/DOpE
-  )
+  HINTS ${DOPE_DIR} ${CMAKE_SOURCE_DIR}/../../../../ $ENV{DOPE_DIR} $ENV{HOME}/DOpE
+)
+ 
 IF(NOT ${DOpElib_FOUND})
   MESSAGE(FATAL_ERROR "\n"
     "*** Could not locate DOpElib. ***\n\n"
