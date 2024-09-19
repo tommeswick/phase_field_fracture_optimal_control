@@ -111,39 +111,61 @@ jobs:
         restore-keys: |
           dealii-9.5.1-with-umfpack-${{ runner.os }}-
 
-    #- name: Set up environment variables for deal.II
-    #  run: |
-    #    export DEAL_II_DIR=~/dealii
-    #    echo "DEAL_II_DIR is set to: $DEAL_II_DIR"
-    #    echo "export DEAL_II_DIR=~/dealii" >> $GITHUB_ENV
+    - name: Restore Cache for DOpElib
+      uses: actions/cache@v3
+      with:
+        path: ~/dopelib
+        key: dopelib-cache-${{ runner.os }}
+        restore-keys: |
+          dopelib-cache-${{ runner.os }}
+
+    - name: Set up environment variables for deal.II and DOpElib
+      run: |
+        export DEAL_II_DIR=~/dealii
+        export DOPELIB_DIR=~/dopelib
+        echo "DEAL_II_DIR=$DEAL_II_DIR" >> $GITHUB_ENV
+        echo "DOPELIB_DIR=$DOPELIB_DIR" >> $GITHUB_ENV
+        echo "DOPE_DIR=$DOPELIB_DIR" >> $GITHUB_ENV
+
+    - name: Install DOpElib (if not cached)
+      if: steps.cache-dopelib.outputs.cache-hit != 'true'
+      run: |
+        # Clone DOpElib from GitHub
+        git clone https://github.com/winnifried/dopelib.git ~/dopelib
+        cd ~/dopelib/DOpEsrc
+
+        # Set the environment variable for deal.II
+        export DEAL_II_DIR=$DEAL_II_DIR
+        
+        # Run the autocmake.sh script to configure DOpElib
+        ./autocmake.sh configure
+        
+        # Build DOpElib using make c-all as per the guide
+        make c-all
+
+        # Debugging: List the contents of the autobuild directories
+        echo "Listing files in autobuild/release and autobuild/debug directories:"
+        ls -R autobuild/release
+        ls -R autobuild/debug
+
+        # Copy the libraries to the expected location
+        mkdir -p ~/dopelib/lib/cmake/DOpElib
+        cp -r autobuild/release/* ~/dopelib/lib/cmake/DOpElib/ 2>/dev/null || echo "No files to copy from release."
+        cp -r autobuild/debug/* ~/dopelib/lib/cmake/DOpElib/ 2>/dev/null || echo "No files to copy from debug."
+
+        # Check if copying was successful
+        echo "Listing ~/dopelib/lib/cmake/DOpElib/ contents:"
+        ls ~/dopelib/lib/cmake/DOpElib/
+
+    - name: Debug DOpElib Installation
+      run: |
+        echo "Listing ~/dopelib/lib/cmake/DOpElib/ contents:"
+        ls ~/dopelib/lib/cmake/DOpElib
         
     - name: Set up environment variables for deal.II
       run: |
         export DEAL_II_DIR=~/dealii
         echo "DEAL_II_DIR=$DEAL_II_DIR" >> $GITHUB_ENV
-
-    - name: Install DOpElib
-      run: |
-        # Clone DOpElib from GitHub
-        git clone https://github.com/winnifried/dopelib.git
-        cd dopelib/DOpEsrc
-
-        # Set the environment variable for deal.II
-        export DEAL_II_DIR=$DEAL_II_DIR
-        
-        # Check the DEAL_II_DIR setting
-        echo "DEAL_II_DIR is set to: $DEAL_II_DIR"
-
-        # Run the autocmake.sh script to configure DOpElib
-        #./autocmake.sh configure
-
-        # Build DOpElib using make c-all as per the guide
-        make c-all
-        
-    - name: Debug DOpElib Installation
-      run: |
-        echo "Listing ~/dopelib/lib/cmake/DOpElib/ contents:"
-        ls ~/dopelib/lib/cmake/DOpElib
 
     - name: Build the project
       run: |
