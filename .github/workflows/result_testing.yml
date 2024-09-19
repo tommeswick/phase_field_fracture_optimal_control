@@ -42,7 +42,12 @@ jobs:
       run: |
         # Install additional dependencies for deal.II
         yum install -y hdf5 hdf5-devel --nobest
-        yum install -y blas lapack boost boost-devel suitesparse
+        yum install -y blas lapack boost boost-devel suitesparse suitesparse-devel
+
+        # Check if /usr/include/suitesparse exists, if not, create a symlink
+        if [ ! -d "/usr/include/suitesparse" ]; then
+          ln -s /usr/include /usr/include/suitesparse
+        fi
 
     - name: Download deal.II tarball
       run: |
@@ -91,7 +96,12 @@ jobs:
         yum install -y epel-release
         yum groupinstall -y "Development Tools"
         yum config-manager --set-enabled powertools  # Enable PowerTools
-        yum install -y cmake wget gcc gcc-c++ make git blas lapack hdf5 hdf5-devel boost boost-devel suitesparse
+        yum install -y cmake wget gcc gcc-c++ make git blas lapack hdf5 hdf5-devel boost boost-devel suitesparse suitesparse-devel
+
+        # Check if /usr/include/suitesparse exists, if not, create a symlink
+        if [ ! -d "/usr/include/suitesparse" ]; then
+          ln -s /usr/include /usr/include/suitesparse
+        fi
 
     - name: Restore Cache for deal.II
       uses: actions/cache@v3
@@ -130,6 +140,12 @@ jobs:
         # Build DOpElib using make c-all as per the guide
         make c-all
 
+
+        # Debugging: List files in autobuild directory to locate libdope.a
+        echo "Listing files in autobuild/release and autobuild/debug directories:"
+        ls -R autobuild/release
+        ls -R autobuild/debug
+
         # Check if the build was successful and copy the libraries
         mkdir -p ~/dopelib/lib
         if [ -f autobuild/release/libdope.a ]; then
@@ -144,9 +160,15 @@ jobs:
           echo "Debug library libdope.a not found!"
         fi
 
-        # Copy headers to the installation directory
-        mkdir -p ~/dopelib/include
-        cp -r ../include/* ~/dopelib/include/
+        # Debugging: Check for the include directory
+        echo "Checking for the include directory:"
+        if [ -d "../include" ]; then
+          echo "Include directory found. Copying headers."
+          mkdir -p ~/dopelib/include
+          cp -r ../include/* ~/dopelib/include/
+        else
+          echo "Include directory not found!"
+        fi
         cd ../..
 
     - name: Build the project
