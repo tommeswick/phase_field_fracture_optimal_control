@@ -207,8 +207,8 @@ jobs:
         # Compile your project
         mkdir build
         cd build
-        cmake ..
-        make release run
+        cmake CMAKE_BUILD_TYPE=Release ..
+        make
     - name: Run tests
       run: |
         # Give execute permission to the test script
