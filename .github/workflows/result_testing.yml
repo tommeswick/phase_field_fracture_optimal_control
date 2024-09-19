@@ -211,5 +211,8 @@ jobs:
         make
     - name: Run tests
       run: |
+        # Give execute permission to the test script
+        chmod +x ./run_tests.sh
+        
         # Run your test script
         ./run_tests.sh
