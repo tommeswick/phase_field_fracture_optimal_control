@@ -101,11 +101,16 @@ jobs:
         restore-keys: |
           dealii-9.5.1-with-umfpack-${{ runner.os }}-
 
+    #- name: Set up environment variables for deal.II
+    #  run: |
+    #    export DEAL_II_DIR=~/dealii
+    #    echo "DEAL_II_DIR is set to: $DEAL_II_DIR"
+    #    echo "export DEAL_II_DIR=~/dealii" >> $GITHUB_ENV
+        
     - name: Set up environment variables for deal.II
       run: |
         export DEAL_II_DIR=~/dealii
-        echo "DEAL_II_DIR is set to: $DEAL_II_DIR"
-        echo "export DEAL_II_DIR=~/dealii" >> $GITHUB_ENV
+        echo "DEAL_II_DIR=$DEAL_II_DIR" >> $GITHUB_ENV
 
     - name: Install DOpElib
       run: |
