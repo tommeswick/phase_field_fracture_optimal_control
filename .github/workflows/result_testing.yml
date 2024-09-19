@@ -208,7 +208,7 @@ jobs:
         mkdir build
         cd build
         cmake ..
-        make
+        make release run
     - name: Run tests
       run: |
         # Give execute permission to the test script
