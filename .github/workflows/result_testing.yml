@@ -135,41 +135,41 @@ jobs:
         echo "DEAL_II_DIR is set to: $DEAL_II_DIR"
 
         # Run the autocmake.sh script to configure DOpElib
-        ./autocmake.sh configure
+        #./autocmake.sh configure
 
         # Build DOpElib using make c-all as per the guide
         make c-all
 
 
         # Debugging: List files in autobuild directory to locate libdope.a
-        echo "Listing files in autobuild/release and autobuild/debug directories:"
-        ls -R autobuild/release
-        ls -R autobuild/debug
+        #echo "Listing files in autobuild/release and autobuild/debug directories:"
+        #ls -R autobuild/release
+        #ls -R autobuild/debug
 
         # Check if the build was successful and copy the libraries
-        mkdir -p ~/dopelib/lib
-        if [ -f autobuild/release/libdope.a ]; then
-          cp autobuild/release/libdope.a ~/dopelib/lib/
-        else
-          echo "Release library libdope.a not found!"
-        fi
+        #mkdir -p ~/dopelib/lib
+        #if [ -f autobuild/release/libdope.a ]; then
+        #  cp autobuild/release/libdope.a ~/dopelib/lib/
+        #else
+        #  echo "Release library libdope.a not found!"
+        #fi
 
-        if [ -f autobuild/debug/libdope.a ]; then
-          cp autobuild/debug/libdope.a ~/dopelib/lib/
-        else
-          echo "Debug library libdope.a not found!"
-        fi
+        #if [ -f autobuild/debug/libdope.a ]; then
+        #  cp autobuild/debug/libdope.a ~/dopelib/lib/
+        #else
+        #  echo "Debug library libdope.a not found!"
+        #fi
 
         # Debugging: Check for the include directory
-        echo "Checking for the include directory:"
-        if [ -d "../include" ]; then
-          echo "Include directory found. Copying headers."
-          mkdir -p ~/dopelib/include
-          cp -r ../include/* ~/dopelib/include/
-        else
-          echo "Include directory not found!"
-        fi
-        cd ../..
+        #echo "Checking for the include directory:"
+        #if [ -d "../include" ]; then
+        #  echo "Include directory found. Copying headers."
+        #  mkdir -p ~/dopelib/include
+        #  cp -r ../include/* ~/dopelib/include/
+        #else
+        #  echo "Include directory not found!"
+        #fi
+        #cd ../..
 
     - name: Build the project
       run: |
