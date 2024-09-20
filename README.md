@@ -47,13 +47,17 @@ Running the code follows with the instructions previously given.
 
 # Documentation
 
+[main.cc](main.cc): 
+[dope.prm](dope.prm):
+[my_functions.h](my_functions.h):
+
 # Contributing guidelines
 
 For contributing to this library, please see [here](CONTRIBUTING.md).
 
 # License
 
-The license is GNU LESSER GENERAL PUBLIC LICENSE (LGPL) Version 2.1, Detailed information can be found [here](LICENSE).
+The license is GNU LESSER GENERAL PUBLIC LICENSE (LGPL) Version 2.1. Detailed information can be found [here](LICENSE).
 
 # References
 
