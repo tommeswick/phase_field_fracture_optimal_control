@@ -4,7 +4,13 @@
 terminal_output_log="terminal_output.log"
 
 # Run the main program and redirect both stdout and stderr to the log file
+echo "Running JCP_5_1_1 program..." | tee -a $terminal_output_log
 ./JCP_5_1_1 > $terminal_output_log 2>&1
+status=$?
+if [ $status -ne 0 ]; then
+    echo "JCP_5_1_1 program failed with exit code $status." | tee -a $terminal_output_log
+    exit 1
+fi
 
 # Debugging: Check if the Results directory exists
 if [ -d "Results" ]; then
