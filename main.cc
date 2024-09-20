@@ -415,7 +415,7 @@ int main(int argc, char **argv)
    * crack_low = 0.98^10 * 0.3 = 0.245. 
    * 
   **/
-	for (unsigned int i = 0; i < 11; i++)
+	for (unsigned int i = 0; i < 1; i++)
 	{
 		try
 		{
