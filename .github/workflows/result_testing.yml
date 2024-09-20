@@ -209,15 +209,24 @@ jobs:
         cd build
         cmake -DCMAKE_BUILD_TYPE=Release ..
         make
-    - name: Run tests and save output
+    - name: Run tests
       run: |
         # Give execute permission to the test script
         chmod +x ./run_tests.sh
-    
-        # Run your test script and save output to a log file
-        ./run_tests.sh > run_tests_output.log 2>&1
-    - name: Upload test log
-      uses: actions/upload-artifact@v2
+
+        # Run your test script and store the output
+        ./run_tests.sh
+        
+    - name: Upload dope.log as an artifact
+      uses: actions/upload-artifact@v3
       with:
-        name: run-tests-log
-        path: run_tests_output.log
+        name: dope-log
+        path: Results/dope.log
+      continue-on-error: true  # Ensure it uploads even if the tests fail
+
+    - name: Upload terminal output as an artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: terminal-output
+        path: terminal_output.log
+      continue-on-error: true  # Ensure it uploads even if the tests fail
