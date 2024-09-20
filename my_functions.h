@@ -1,24 +1,14 @@
-/**
-*
-* Copyright (C) 2012-2014 by the DOpElib authors
-*
-* This file is part of DOpElib
-*
-* DOpElib is free software: you can redistribute it
-* and/or modify it under the terms of the GNU General Public
-* License as published by the Free Software Foundation, either
-* version 3 of the License, or (at your option) any later
-* version.
-*
-* DOpElib is distributed in the hope that it will be
-* useful, but WITHOUT ANY WARRANTY; without even the implied
-* warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-* PURPOSE.  See the GNU General Public License for more
-* details.
-*
-* Please refer to the file LICENSE.TXT included in this distribution
-* for further information on this license.
-*
+/** Copyright (C) 2024 by Denis Khimin, Marc C. Steinbach, Thomas Wick   
+ *
+ *  This file is part of the phase_field_fracture_optimal_control library
+ *  and derived from DOpElib.
+ *
+ *  The phase_field_fracture_optimal_control library is free software; 
+ *  you can use it, redistribute it, and/or modify it
+ *  under the terms of the GNU Lesser General
+ *  Public License as published by the Free Software Foundation; either
+ *  version 2.1 of the License, or (at your option) any later version.
+ *  The full text of the license can be found in the file LICENSE. 
 **/
 
 #include <wrapper/function_wrapper.h>
