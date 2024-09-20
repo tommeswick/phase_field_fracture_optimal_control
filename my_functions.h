@@ -1,7 +1,6 @@
 /** Copyright (C) 2024 by Denis Khimin, Marc C. Steinbach, Thomas Wick   
  *
- *  This file is part of the phase_field_fracture_optimal_control library
- *  and derived from DOpElib.
+ *  This file is part of the phase_field_fracture_optimal_control library.
  *
  *  The phase_field_fracture_optimal_control library is free software; 
  *  you can use it, redistribute it, and/or modify it
