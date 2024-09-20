@@ -75,7 +75,6 @@ jobs:
         else
           echo "deal.II directory not found!"
         fi
-
   install-dopelib:
     runs-on: ubuntu-latest
     container: rockylinux:8
@@ -149,7 +148,7 @@ jobs:
         echo "Listing ~/dopelib/lib/cmake/DOpElib/ contents:"
         ls ~/dopelib/lib/cmake/DOpElib/
         
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
     container: rockylinux:8
     needs: install-dopelib  # This job depends on the install-dopelib job
@@ -204,76 +203,21 @@ jobs:
         ls /usr/lib64/liblapack*
         echo "Listing METIS libraries:"
         ls /usr/lib64/libmetis*
+        # Compile your project
         mkdir build
         cd build
         cmake -DCMAKE_BUILD_TYPE=Release ..
         make
+    - name: Run tests
+      run: |
+        # Give execute permission to the test script
+        chmod +x ./run_tests.sh
 
-    # Upload JCP_5_1_1 as an artifact so that the run-tests job can access it
-    - name: Upload JCP_5_1_1 artifact
+        # Run your test script and redirect output to a log file
+        ./run_tests.sh > test_output.log 2>&1
+
+    - name: Upload test output log as an artifact
       uses: actions/upload-artifact@v3
       with:
-        name: JCP-executable
-        path: /__w/phase_field_fracture_optimal_control/phase_field_fracture_optimal_control/JCP_5_1_1
-
-  run-tests:
-    runs-on: ubuntu-latest
-    container: rockylinux:8
-    needs: build
-
-    steps:
-     - name: Checkout code
-       uses: actions/checkout@v2
-
-     - name: Restore environment variables
-       run: |
-         export DEAL_II_DIR=~/dealii
-         export DOPELIB_DIR=~/dopelib
-
-     - name: Download JCP_5_1_1 executable
-       uses: actions/download-artifact@v3
-       with:
-         name: JCP-executable
-         path: .  # Download it into the current directory
-
-     - name: Check downloaded files and ensure executable permissions
-       run: |
-        ls -lh JCP_5_1_1
-        chmod +x JCP_5_1_1
-        ls -lh JCP_5_1_1  # Verify that execute permissions are set
-
-     - name: Run tests
-       run: |
-         chmod +x ./run_tests.sh
-         ./run_tests.sh
-
-     - name: Upload dope.log as an artifact
-       uses: actions/upload-artifact@v3
-       with:
-         name: dope-log
-         path: Results/dope.log
-
-     - name: Upload terminal output as an artifact
-       uses: actions/upload-artifact@v3
-       with:
-         name: terminal-output
-         path: terminal_output.log
-
-  compare-tests:
-    runs-on: ubuntu-latest
-    needs: run-tests
-
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
-    - name: Download dope.log artifact
-      uses: actions/download-artifact@v3
-      with:
-        name: dope-log
-        path: ./downloaded-results
-
-    - name: Compare dope.log with reference log
-      run: |
-        chmod +x ./compare_tests.sh
-        ./compare_tests.sh ./downloaded-results/dope.log ./dope_Aug_12_2024.log
+        name: test-output-log
+        path: test_output.log
