@@ -210,7 +210,7 @@ jobs:
         cmake -DCMAKE_BUILD_TYPE=Release ..
         make
 
-  run-tests:
+    run-tests:
     runs-on: ubuntu-latest
     container: rockylinux:8
     needs: build
@@ -230,12 +230,14 @@ jobs:
         ./run_tests.sh
 
     - name: Upload dope.log as an artifact
+      if: success() || failure()
       uses: actions/upload-artifact@v3
       with:
         name: dope-log
         path: Results/dope.log
 
     - name: Upload terminal output as an artifact
+      if: success() || failure()
       uses: actions/upload-artifact@v3
       with:
         name: terminal-output
