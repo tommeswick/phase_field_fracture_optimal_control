@@ -210,7 +210,7 @@ jobs:
         cmake -DCMAKE_BUILD_TYPE=Release ..
         make
 
-    run-tests:
+  run-tests:
     runs-on: ubuntu-latest
     container: rockylinux:8
     needs: build
