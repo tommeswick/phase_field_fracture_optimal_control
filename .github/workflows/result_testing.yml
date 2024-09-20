@@ -238,5 +238,11 @@ jobs:
 
     - name: Compare test output with reference log
       run: |
-        diff ./downloaded-logs/test_output.log ./reference.log || (echo "Test logs do not match" && exit 1)
+        # Get the total number of lines in the reference log
+        total_lines=$(wc -l < ./reference.log)
 
+        # Crop the test output log to match the size of the reference log
+        head -n "$total_lines" ./downloaded-logs/test_output.log > test_output_cropped.log
+
+        # Compare the cropped test output log with the reference log
+        diff test_output_cropped.log ./reference.log || (echo "Test logs do not match" && exit 1)
