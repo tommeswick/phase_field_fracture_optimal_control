@@ -204,11 +204,17 @@ jobs:
         ls /usr/lib64/liblapack*
         echo "Listing METIS libraries:"
         ls /usr/lib64/libmetis*
-        # Compile your project
         mkdir build
         cd build
         cmake -DCMAKE_BUILD_TYPE=Release ..
         make
+
+    # Upload JCP_5_1_1 as an artifact so that the run-tests job can access it
+    - name: Upload JCP_5_1_1 artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: JCP-executable
+        path: build/JCP_5_1_1
 
   run-tests:
     runs-on: ubuntu-latest
@@ -219,10 +225,12 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Restore environment variables
-      run: |
-        export DEAL_II_DIR=~/dealii
-        export DOPELIB_DIR=~/dopelib
+    # Download the artifact (JCP_5_1_1) from the build job
+    - name: Download JCP_5_1_1 artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: JCP-executable
+        path: .
 
     - name: Run tests
       run: |
@@ -230,19 +238,16 @@ jobs:
         ./run_tests.sh
 
     - name: Upload dope.log as an artifact
-      if: success() || failure()
       uses: actions/upload-artifact@v3
       with:
         name: dope-log
         path: Results/dope.log
 
     - name: Upload terminal output as an artifact
-      if: success() || failure()
       uses: actions/upload-artifact@v3
       with:
         name: terminal-output
         path: terminal_output.log
-
 
   compare-tests:
     runs-on: ubuntu-latest
