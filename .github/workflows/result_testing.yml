@@ -222,32 +222,42 @@ jobs:
     needs: build
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+     - name: Checkout code
+       uses: actions/checkout@v2
 
-    # Download the artifact (JCP_5_1_1) from the build job
-    - name: Download JCP_5_1_1 artifact
-      uses: actions/download-artifact@v3
-      with:
-        name: JCP-executable
-        path: .
+     - name: Restore environment variables
+       run: |
+         export DEAL_II_DIR=~/dealii
+         export DOPELIB_DIR=~/dopelib
 
-    - name: Run tests
-      run: |
-        chmod +x ./run_tests.sh
-        ./run_tests.sh
+     - name: Download JCP_5_1_1 executable
+       uses: actions/download-artifact@v3
+       with:
+         name: JCP-executable
+         path: .  # Download it into the current directory
 
-    - name: Upload dope.log as an artifact
-      uses: actions/upload-artifact@v3
-      with:
-        name: dope-log
-        path: Results/dope.log
+     - name: Check downloaded files and ensure executable permissions
+       run: |
+        ls -lh JCP_5_1_1
+        chmod +x JCP_5_1_1
+        ls -lh JCP_5_1_1  # Verify that execute permissions are set
 
-    - name: Upload terminal output as an artifact
-      uses: actions/upload-artifact@v3
-      with:
-        name: terminal-output
-        path: terminal_output.log
+     - name: Run tests
+       run: |
+         chmod +x ./run_tests.sh
+         ./run_tests.sh
+
+     - name: Upload dope.log as an artifact
+       uses: actions/upload-artifact@v3
+       with:
+         name: dope-log
+         path: Results/dope.log
+
+     - name: Upload terminal output as an artifact
+       uses: actions/upload-artifact@v3
+       with:
+         name: terminal-output
+         path: terminal_output.log
 
   compare-tests:
     runs-on: ubuntu-latest
