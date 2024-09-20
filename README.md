@@ -38,6 +38,16 @@ which can be thus changed when multiple simulations shall be run simultaneously)
 Example 1 (Section 5.1.1) of Khimin et al., JCP, 2022. To compare the terminal output of the current
 implementation with own runs, the log file dope_Aug_12_2024.log can be used.
 
+# First steps
+
+# Automated testing
+
+# Documentation
+
+# Contributing guidelines
+
+# License
+
 # References
 
 [[1]](https://doi.org/10.1016/j.jcp.2022.111554) Denis Khimin, Marc C. Steinbach, Thomas Wick; Space-time formulation, discretization, and computational performance studies for phase-field fracture optimal control problems,
