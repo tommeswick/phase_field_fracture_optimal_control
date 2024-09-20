@@ -214,7 +214,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: JCP-executable
-        path: build/JCP_5_1_1
+        path: /__w/phase_field_fracture_optimal_control/phase_field_fracture_optimal_control/JCP_5_1_1
 
   run-tests:
     runs-on: ubuntu-latest
