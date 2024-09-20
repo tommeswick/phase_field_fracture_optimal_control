@@ -40,17 +40,20 @@ implementation with own runs, the log file dope_Aug_12_2024.log can be used.
 
 # First steps
 
+As the first steps, we recommend to read [1] first in order to understand the algorithmic background. Next, C++ knowledge in order to handle DOpElib and deal.II is required. Afterwards, the point of departure is [main.cc](main.cc). Therein, all include files from DOpElib and deal.II are taken as well as all the basic functionality is set up. The runtime parameters are adjusted in [dope.prm](dope.prm).
+Running the code follows with the instructions previously given.
+
 # Automated testing
 
 # Documentation
 
 # Contributing guidelines
 
-For contributing to this library, please see [here](CONTRIBUTING.md)
+For contributing to this library, please see [here](CONTRIBUTING.md).
 
 # License
 
-The license information can be found [here](LICENSE)
+The license is GNU LESSER GENERAL PUBLIC LICENSE (LGPL) Version 2.1, Detailed information can be found [here](LICENSE).
 
 # References
 
