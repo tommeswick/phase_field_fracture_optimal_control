@@ -45,4 +45,5 @@ Journal of Computational Physics (JCP), Vol. 470, 2022.
 
 [[2]](https://doi.org/10.11588/ans.2017.2.11815) Christian Goll, Thomas Wick, Winnifried Wollner; DOpElib: Differential Equations and Optimization Environment; A Goal Oriented Software
 Library for Solving PDEs and Optimization Problems with PDEs, Archive of Numerical Software (ANS), Vol. 5(2),  pp. 1-14, 2017.
-[3] Daniel Arndt, Wolfgang Bangerth, Maximilian Bergbauer, Marco Feder, Marc Fehling, Johannes Heinz, Timo Heister, Luca Heltai, Martin Kronbichler, Matthias Maier, Peter Munch, Jean-Paul Pelteret, Bruno Turcksin, David Wells, Stefano Zampini. The deal.II Library, Version 9.5, Journal of Numerical Mathematics, vol. 31, no. 3, pages 231-246, 2023. 
+
+[[3]](https://doi.org/10.1515/jnma-2023-0089) Daniel Arndt, Wolfgang Bangerth, Maximilian Bergbauer, Marco Feder, Marc Fehling, Johannes Heinz, Timo Heister, Luca Heltai, Martin Kronbichler, Matthias Maier, Peter Munch, Jean-Paul Pelteret, Bruno Turcksin, David Wells, Stefano Zampini. The deal.II Library, Version 9.5, Journal of Numerical Mathematics, vol. 31, no. 3, pages 231-246, 2023. 
