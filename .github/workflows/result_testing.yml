@@ -221,3 +221,22 @@ jobs:
       with:
         name: test-output-log
         path: test_output.log
+
+  compare-tests:
+    runs-on: ubuntu-latest
+    needs: build-and-test
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Download test output log artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: test-output-log
+        path: ./downloaded-logs
+
+    - name: Compare test output with reference log
+      run: |
+        diff ./downloaded-logs/test_output.log ./reference.log || (echo "Test logs do not match" && exit 1)
+
