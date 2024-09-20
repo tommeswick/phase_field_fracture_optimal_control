@@ -214,7 +214,7 @@ jobs:
         chmod +x ./run_tests.sh
 
         # Run your test script and redirect output to a log file
-        ./run_tests.sh > test_output.log 2>&1
+        ./run_tests.sh | tee test_output.log
 
     - name: Upload test output log as an artifact
       uses: actions/upload-artifact@v3
