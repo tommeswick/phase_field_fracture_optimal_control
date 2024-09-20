@@ -46,9 +46,11 @@ implementation with own runs, the log file dope_Aug_12_2024.log can be used.
 
 # Contributing guidelines
 
-For contributing, please see [here](CONTRIBUTING.md)
+For contributing to this library, please see [here](CONTRIBUTING.md)
 
 # License
+
+The license information can be found [here](LICENSE)
 
 # References
 
