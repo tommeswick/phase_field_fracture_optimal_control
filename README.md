@@ -49,7 +49,7 @@ The project is atomatically tested in the CI workflow, triggered by pushes or pu
 
 # Documentation
 
-[main.cc](main.cc): In this file, first deal.II and DOpElib libraries are included. Then, local files such as [localpde.h](localpde.h), [localfunctional.h](localfunctional.h), [functionals.h](functionals.h), and [my_functions.h](my_functions.h) are included. Then, various initialization take place such as DoFHandler, finite elements, quadrature rules, sparsity patterns, FunctionalInterface, OptProblemContainer, StateProblem, time stepping scheme, InstatOptProblemContainer, Integrator containers, linear solvers, nonlinear solvers, InstatStepModifiedNewtonSolver, and finally the reduced Newton algorithm for solving the overall optimization loop. Also, runtime parameters are read in from [dope.prm](dope.prm). All functionalities are initialized 
+[main.cc](main.cc): In this file, first deal.II and DOpElib libraries are included. Then, local files such as [localpde_eta.h](localpde_eta.h), [localfunctional.h](localfunctional.h), [functionals.h](functionals.h), and [my_functions.h](my_functions.h) are included. Then, various initialization take place such as DoFHandler, finite elements, quadrature rules, sparsity patterns, FunctionalInterface, OptProblemContainer, StateProblem, time stepping scheme, InstatOptProblemContainer, Integrator containers, linear solvers, nonlinear solvers, InstatStepModifiedNewtonSolver, and finally the reduced Newton algorithm for solving the overall optimization loop. Also, runtime parameters are read in from [dope.prm](dope.prm). All functionalities are initialized 
 and a final for-loop of the optimization algorithm is designed.
 
 
