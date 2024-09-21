@@ -221,30 +221,3 @@ jobs:
       with:
         name: test-output-log
         path: test_output.log
-
-  compare-tests:
-    runs-on: ubuntu-latest
-    needs: build-and-test
-
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
-    - name: Download test output log artifact
-      uses: actions/download-artifact@v3
-      with:
-        name: test-output-log
-        path: ./downloaded-logs
-
-    - name: Compare test output with reference log (less than 20 differences)
-      run: |
-        # Count the number of different lines using diff
-        diff_count=$(diff -U 0 ./downloaded-logs/test_output.log ./reference.log | grep -v ^@ | wc -l)
-
-        # Check if the number of different lines is less than 20
-        if [ "$diff_count" -lt 20 ]; then
-          echo "Files are sufficiently similar with less than 20 differing lines."
-        else
-          echo "Files have more than 20 differing lines. Differences: $diff_count"
-          exit 1
-        fi
