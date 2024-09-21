@@ -47,9 +47,20 @@ Running the code follows with the instructions previously given.
 
 # Documentation
 
-[main.cc](main.cc): 
-[dope.prm](dope.prm):
-[my_functions.h](my_functions.h):
+[main.cc](main.cc): In this file, first deal.II and DOpElib libraries are included. Then, local files such as [localpde.h](localpde.h), [localfunctional.h](localfunctional.h), [functionals.h](functionals.h), and [my_functions.h](my_functions.h) are included.
+
+
+[dope.prm](dope.prm): This is the runtime parameter file. Therein, global and local parameters can be adjusted without compiling the code again. These values are model, regularization, material, numerical, optimization parameters. Moreover, the output directory can be chosen.
+
+[localpde.h](localpde.h): In this file, the actual model, i.e., PDE system is implemented. Here, it is a quasi-static phase-field fracture system with two unknowns: vector-valued displacements and a scalar-valued smooth indicator function. The latter is subject to an inequality constraint in time, i.e., crack irreversibility. This is treated with the help of simple penalization.
+
+[localfunctional.h](localfunctional.h): In this file, the optimization objective is implemented in terms of the cost functional. 
+
+[functionals.h](functionals.h): In this file, additional output functionals are implemented, so-called quantities of interest that are specifically interesting to be observed from an physics or engineering point of view.
+
+[my_functions.h](my_functions.h): In this file, problem-specific functions such as non-homogeneous Dirichlet boundary conditions are implemented.
+
+
 
 # Contributing guidelines
 
