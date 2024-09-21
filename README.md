@@ -45,7 +45,7 @@ Running the code follows with the instructions previously given.
 
 # Automated testing
 
-The project is atomatically tests in the CI workflow, triggered by pushes or pull requests to the main branch. The workflow consists of three jobs: cache-dealii, install-dopelib, and build-and-test, all running on a Rocky Linux container. The cache-dealii job installs necessary dependencies and builds deal.II, caching the results for future use. The install-dopelib job installs DOpElib and depends on the deal.II cache, while the build-and-test job compiles the phase-field fracture project and runs the test script, uploading the test output log as an artifact for further analysis.
+The project is atomatically tested in the CI workflow, triggered by pushes or pull requests to the main branch. The workflow consists of three jobs: cache-dealii, install-dopelib, and build-and-test, all running on a Rocky Linux container. The cache-dealii job installs necessary dependencies and builds deal.II, caching the results for future use. The install-dopelib job installs DOpElib and depends on the deal.II cache, while the build-and-test job compiles the phase-field fracture project and runs the test script, uploading the test output log as an artifact for further analysis.
 
 # Documentation
 
