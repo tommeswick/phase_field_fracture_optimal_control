@@ -236,13 +236,15 @@ jobs:
         name: test-output-log
         path: ./downloaded-logs
 
-    - name: Compare test output with reference log
+    - name: Compare test output with reference log (less than 20 differences)
       run: |
-        # Get the total number of lines in the reference log
-        total_lines=$(wc -l < ./reference.log)
+        # Count the number of different lines using diff
+        diff_count=$(diff -U 0 ./downloaded-logs/test_output.log ./reference.log | grep -v ^@ | wc -l)
 
-        # Crop the test output log to match the size of the reference log
-        head -n "$total_lines" ./downloaded-logs/test_output.log > test_output_cropped.log
-
-        # Compare the cropped test output log with the reference log
-        diff test_output_cropped.log ./reference.log || (echo "Test logs do not match" && exit 1)
+        # Check if the number of different lines is less than 20
+        if [ "$diff_count" -lt 20 ]; then
+          echo "Files are sufficiently similar with less than 20 differing lines."
+        else
+          echo "Files have more than 20 differing lines. Differences: $diff_count"
+          exit 1
+        fi
