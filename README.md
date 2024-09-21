@@ -55,7 +55,7 @@ and a final for-loop of the optimization algorithm is designed.
 
 [dope.prm](dope.prm): This is the runtime parameter file. Therein, global and local parameters can be adjusted without compiling the code again. These values are model, regularization, material, numerical, optimization parameters. Moreover, the output directory can be chosen.
 
-[localpde.h](localpde.h): In this file, the actual model, i.e., PDE system is implemented. Here, it is a quasi-static phase-field fracture system with two unknowns: vector-valued displacements and a scalar-valued smooth indicator function. The latter is subject to an inequality constraint in time, i.e., crack irreversibility. This is treated with the help of simple penalization.
+[localpde_eta.h](localpde_eta.h): In this file, the actual model, i.e., PDE system is implemented. Here, it is a quasi-static phase-field fracture system with two unknowns: vector-valued displacements and a scalar-valued smooth indicator function. The latter is subject to an inequality constraint in time, i.e., crack irreversibility. This is treated with the help of simple penalization.
 
 [localfunctional.h](localfunctional.h): In this file, the optimization objective is implemented in terms of the cost functional. 
 
