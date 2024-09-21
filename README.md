@@ -45,6 +45,8 @@ Running the code follows with the instructions previously given.
 
 # Automated testing
 
+The project is atomatically tests in the CI workflow, triggered by pushes or pull requests to the main branch. The workflow consists of three jobs: cache-dealii, install-dopelib, and build-and-test, all running on a Rocky Linux container. The cache-dealii job installs necessary dependencies and builds deal.II, caching the results for future use. The install-dopelib job installs DOpElib and depends on the deal.II cache, while the build-and-test job compiles the phase-field fracture project and runs the test script, uploading the test output log as an artifact for further analysis.
+
 # Documentation
 
 [main.cc](main.cc): In this file, first deal.II and DOpElib libraries are included. Then, local files such as [localpde.h](localpde.h), [localfunctional.h](localfunctional.h), [functionals.h](functionals.h), and [my_functions.h](my_functions.h) are included. Then, various initialization take place such as DoFHandler, finite elements, quadrature rules, sparsity patterns, FunctionalInterface, OptProblemContainer, StateProblem, time stepping scheme, InstatOptProblemContainer, Integrator containers, linear solvers, nonlinear solvers, InstatStepModifiedNewtonSolver, and finally the reduced Newton algorithm for solving the overall optimization loop. Also, runtime parameters are read in from [dope.prm](dope.prm). All functionalities are initialized 
