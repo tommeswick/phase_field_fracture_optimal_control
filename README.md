@@ -55,6 +55,8 @@ and a final for-loop of the optimization algorithm is designed.
 
 [dope.prm](dope.prm): This is the runtime parameter file. Therein, global and local parameters can be adjusted without compiling the code again. These values are model, regularization, material, numerical, optimization parameters. Moreover, the output directory can be chosen.
 
+[unit_slit.inp](unit_slit.inp): This is the finite element mesh file.
+
 [localpde_eta.h](localpde_eta.h): In this file, the actual model, i.e., PDE system is implemented. Here, it is a quasi-static phase-field fracture system with two unknowns: vector-valued displacements and a scalar-valued smooth indicator function. The latter is subject to an inequality constraint in time, i.e., crack irreversibility. This is treated with the help of simple penalization.
 
 [localfunctional.h](localfunctional.h): In this file, the optimization objective is implemented in terms of the cost functional. 
@@ -63,6 +65,7 @@ and a final for-loop of the optimization algorithm is designed.
 
 [my_functions.h](my_functions.h): In this file, problem-specific functions such as non-homogeneous Dirichlet boundary conditions are implemented.
 
+[instat_step_modified_newtonsolver.h](instat_step_modified_newtonsolver.h): This file directly derived from the main DOpElib library, but modified for the purpose of this phase_field_fracture_optimal_control library.
 
 
 # Contributing guidelines
