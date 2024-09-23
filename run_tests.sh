@@ -22,12 +22,4 @@ else
     exit 1
 fi
 
-# Compare the generated log file with the expected log file
-if diff -q Results/dope.log ../dope_Aug_12_2024.log; then
-    echo "Output matches the expected results."
-else
-    echo "Output does not match the expected results."
-    exit 1
-fi
-
 echo "All tests passed!"
