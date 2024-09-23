@@ -9,9 +9,9 @@ published in 2022. The code we provide is completely novel and offers a concrete
 The provided codebase is designed to solve phase-field fracture optimal control 
 problems, wherein the goal is to achieve a desired fracture in a brittle material
 thorugh the application of external forces. This algorithmic framework was developed alongside our recent publication
-[1] and enables the accurate and efficient simulation of phase-field optimal control problems in a space-time fashion. 
+[[1]](https://doi.org/10.1016/j.jcp.2022.111554) and enables the accurate and efficient simulation of phase-field optimal control problems in a space-time fashion. 
 In this example, the fracture is controlled through Neumann boundary conditions, and the cost functioncal tracks the distance between.
-Our code is based on the open source libraries DOpElib [2] and deal.II [3].
+Our code is based on the open source libraries DOpElib [[2]](https://doi.org/10.11588/ans.2017.2.11815) and deal.II [[3]](https://doi.org/10.1515/jnma-2023-0089).
 
 # Installation instructions and executing the code
 
@@ -32,15 +32,16 @@ Then: build, compile, run as described in Section 4.4 of the dopelib manual.
 To this end, building and compiling yields the executable JCP_5_1_1 that can
 be run in the (Linux) terminal via ./JCP_5_1_1 
 by taking implicitly the parameter file dope.prm into account.
+For additional information you can also check the [workflow script](https://github.com/tommeswick/phase_field_fracture_optimal_control/.github/workflows/result_testing.yml).
 
-4. The results of this code (see local folder Results/ (this name given in dope.prm (bottom),
+5. The results of this code (see local folder Results/ (this name given in dope.prm (bottom),
 which can be thus changed when multiple simulations shall be run simultaneously) ) should then reproduce 
 Example 1 (Section 5.1.1) of Khimin et al., JCP, 2022. To compare the terminal output of the current
 implementation with own runs, the log file dope_Aug_12_2024.log can be used.
 
 # First steps
 
-As the first steps, we recommend to read [1] first in order to understand the algorithmic background. Next, C++ knowledge in order to handle DOpElib and deal.II is required. Afterwards, the point of departure is [main.cc](main.cc). Therein, all include files from DOpElib and deal.II are taken as well as all the basic functionality is set up. The runtime parameters are adjusted in [dope.prm](dope.prm).
+As the first steps, we recommend to read [[1]](https://doi.org/10.1016/j.jcp.2022.111554) first in order to understand the algorithmic background. Next, C++ knowledge in order to handle DOpElib and deal.II is required. Afterwards, the point of departure is [main.cc](main.cc). Therein, all include files from DOpElib and deal.II are taken as well as all the basic functionality is set up. The runtime parameters are adjusted in [dope.prm](dope.prm).
 Running the code follows with the instructions previously given.
 
 # Automated testing
@@ -51,7 +52,6 @@ The project is atomatically tested in the CI workflow, triggered by pushes or pu
 
 [main.cc](main.cc): In this file, first deal.II and DOpElib libraries are included. Then, local files such as [localpde_eta.h](localpde_eta.h), [localfunctional.h](localfunctional.h), [functionals.h](functionals.h), and [my_functions.h](my_functions.h) are included. Then, various initialization take place such as DoFHandler, finite elements, quadrature rules, sparsity patterns, FunctionalInterface, OptProblemContainer, StateProblem, time stepping scheme, InstatOptProblemContainer, Integrator containers, linear solvers, nonlinear solvers, InstatStepModifiedNewtonSolver, and finally the reduced Newton algorithm for solving the overall optimization loop. Also, runtime parameters are read in from [dope.prm](dope.prm). All functionalities are initialized 
 and a final for-loop of the optimization algorithm is designed.
-
 
 [dope.prm](dope.prm): This is the runtime parameter file. Therein, global and local parameters can be adjusted without compiling the code again. These values are model, regularization, material, numerical, optimization parameters. Moreover, the output directory can be chosen.
 
@@ -67,6 +67,7 @@ and a final for-loop of the optimization algorithm is designed.
 
 [instat_step_modified_newtonsolver.h](instat_step_modified_newtonsolver.h): This file directly derived from the main DOpElib library, but modified for the purpose of this phase_field_fracture_optimal_control library.
 
+[run_tests.sh](run_tests.sh): This is a script which executes ./JCP_5_1_1 and is called by the [workflow script](https://github.com/tommeswick/phase_field_fracture_optimal_control/.github/workflows/result_testing.yml).
 
 # Contributing guidelines
 
