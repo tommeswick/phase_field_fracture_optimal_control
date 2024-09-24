@@ -48,7 +48,7 @@ Fracture mechanics and optimal control are critical areas in
 engineering, material sciences, and applied mathematics. They
 address challenges in predicting and controlling 
 crack propagation. One successful method for crack propagation 
-is based on phase-field modeling [@BourFraMar00], [@MieWelHof10a], [@KuMue10], [@AmGeraLoren15], [@WuNgNgSuBoSi19], [@Wi20_book], [@DiLiWiTy22].
+is based on phase-field modeling [@BourFraMar00], [@Miehe2010a], [@KuMue10], [@AmGeraLoren15], [@WuNgNgSuBoSi19], [@Wi20_book], [@DiLiWiTy22].
 In extension to such so-called forward models, parameter estimation, inverse modeling 
 and optimal control configurations are of interest. Therein, an additional level 
 of complexity is added as the forward problem is solved multiple times within the optimization 
