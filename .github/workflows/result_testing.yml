@@ -171,7 +171,7 @@ jobs:
         yum install -y epel-release
         yum groupinstall -y "Development Tools"
         yum config-manager --set-enabled powertools  # Enable PowerTools
-        yum install -y cmake wget gcc gcc-c++ make git blas lapack lapack-devel hdf5 hdf5-devel boost boost-devel suitesparse suitesparse-devel metis metis-devel
+        yum install -y cmake wget gcc gcc-c++ make git openblas openblas-devel blas lapack lapack-devel hdf5 hdf5-devel boost boost-devel suitesparse suitesparse-devel metis metis-devel
         # Check if /usr/include/suitesparse exists, if not, create a symlink
         if [ ! -d "/usr/include/suitesparse" ]; then
           ln -s /usr/include /usr/include/suitesparse
@@ -197,15 +197,21 @@ jobs:
       run: |
         export DEAL_II_DIR=~/dealii
         export DOPELIB_DIR=~/dopelib
+        export BLAS_LIBRARIES="/usr/lib64/libopenblas.so"
+        export LAPACK_LIBRARIES="/usr/lib64/libopenblas.so"
         echo "DEAL_II_DIR=$DEAL_II_DIR" >> $GITHUB_ENV
         echo "DOPELIB_DIR=$DOPELIB_DIR" >> $GITHUB_ENV
         echo "DOPE_DIR=$DOPELIB_DIR" >> $GITHUB_ENV
+        echo "BLAS_LIBRARIES=$BLAS_LIBRARIES" >> $GITHUB_ENV
+        echo "LAPACK_LIBRARIES=$LAPACK_LIBRARIES" >> $GITHUB_ENV
     - name: Build the project
       run: |
         # Set up environment variables
         export DEAL_II_DIR=~/dealii
         export DOPELIB_DIR=~/dopelib
         export DOPE_DIR=~/dopelib  # Set the DOPE_DIR environment variable
+        export BLAS_LIBRARIES="/usr/lib64/libopenblas.so"
+        export LAPACK_LIBRARIES="/usr/lib64/libopenblas.so"
         # Debugging step: Check the presence of LAPACK and METIS libraries
         echo "Listing LAPACK libraries:"
         ls /usr/lib64/liblapack*
