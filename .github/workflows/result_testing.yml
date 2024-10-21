@@ -61,7 +61,12 @@ jobs:
       run: |
         tar -xzf dealii-9.5.1.tar.gz
         cd dealii-9.5.1
-        cmake -DCMAKE_INSTALL_PREFIX=~/dealii -DDEAL_II_WITH_UMFPACK=ON -DDEAL_II_WITH_LAPACK=ON .
+        cmake -DCMAKE_INSTALL_PREFIX=~/dealii \
+              -DDEAL_II_WITH_UMFPACK=ON \
+              -DDEAL_II_WITH_LAPACK=ON \
+              -DBLAS_LIBRARIES=/usr/lib64/libblas.so \
+              -DLAPACK_LIBRARIES=/usr/lib64/liblapack.so \
+              .
         make -j$(nproc)
         make install
         cd ..
